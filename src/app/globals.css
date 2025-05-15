@@ -1,0 +1,20 @@
+* {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: Inter, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  min-width: 100vw;
+
+}
+
+:root {
+  --primary-green: #0A8834;
+  --light-green: #8CB198;
+  --white: #fff;
+  --black: #000;
+
+}
