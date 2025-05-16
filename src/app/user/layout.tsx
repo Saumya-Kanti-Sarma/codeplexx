@@ -1,7 +1,6 @@
 "use Client";
 
 import type { Metadata } from "next";
-import "./globals.css";
 import Navbar from "@/components/NavBar/Navbar";
 
 
@@ -28,6 +27,7 @@ export default function RootLayout({
 
       </head>
       <body>
+        <Navbar />
         {children}
       </body>
     </html>

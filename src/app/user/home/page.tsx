@@ -3,7 +3,7 @@
 export default function Home() {
   return (
     <>
-      this is login/register
+      this is home page
     </>
   );
 }
