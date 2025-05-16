@@ -1,3 +1,4 @@
+"use client";
 import styles from "./page.module.css"
 interface BtnProps {
   text: String;
@@ -7,10 +8,13 @@ interface BtnProps {
 }
 const Btn: React.FC<BtnProps> = ({ text = "Button", onClick, bgColor = "--primary-green" }) => {
   return (
-    <button onClick={onClick} className={styles.btn}
+    <button
+      onClick={onClick}
+      className={styles.btn}
       style={{
         backgroundColor: `var(${bgColor})`
       }}
+
     >
       {text}
     </button>
