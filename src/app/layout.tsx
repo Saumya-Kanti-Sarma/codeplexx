@@ -7,7 +7,7 @@ import Navbar from "@/components/NavBar/Navbar";
 
 
 export const metadata: Metadata = {
-  title: "CPLEXX | Blog post for developers from all across the world",
+  title: "Get Started with Code Plexx",
   description: "All your need is here!",
   icons: {
     icon: "/icons/cplexx.png"

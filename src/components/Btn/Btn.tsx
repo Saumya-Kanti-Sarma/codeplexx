@@ -1,18 +1,20 @@
 "use client";
 import styles from "./page.module.css"
 interface BtnProps {
-  text: String;
-  onClick: () => void;
-  bgColor: String;
+  text: string;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  bgColor: string;
+  width: string
 
 }
-const Btn: React.FC<BtnProps> = ({ text = "Button", onClick, bgColor = "--primary-green" }) => {
+const Btn: React.FC<BtnProps> = ({ text = "Button", onClick, bgColor = "--primary-green", width }) => {
   return (
     <button
       onClick={onClick}
       className={styles.btn}
       style={{
-        backgroundColor: `var(${bgColor})`
+        backgroundColor: `var(${bgColor})`,
+        width: width
       }}
 
     >
