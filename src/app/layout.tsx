@@ -9,6 +9,9 @@ import Navbar from "@/components/NavBar/Navbar";
 export const metadata: Metadata = {
   title: "CPLEXX | Blog post for developers from all across the world",
   description: "All your need is here!",
+  icons: {
+    icon: "/icons/cplexx.png"
+  }
 };
 
 export default function RootLayout({
