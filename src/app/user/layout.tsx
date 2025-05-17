@@ -3,8 +3,6 @@
 import type { Metadata } from "next";
 import Navbar from "@/components/NavBar/Navbar";
 
-
-
 export const metadata: Metadata = {
   title: "CPLEXX | Blog post for developers from all across the world",
   description: "All your need is here!",
@@ -28,7 +26,9 @@ export default function RootLayout({
       </head>
       <body>
         <Navbar />
-        {children}
+        <main id="main-container">
+          {children}
+        </main>
       </body>
     </html>
   );

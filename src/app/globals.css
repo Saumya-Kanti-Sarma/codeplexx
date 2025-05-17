@@ -5,10 +5,17 @@
   font-family: Inter, sans-serif;
 }
 
+html,
 body {
-  min-height: 100vh;
-  min-width: 100vw;
+  height: 100%;
+  overflow: hidden;
+  /* navbar stays at top, no body scroll */
+}
 
+#main-container {
+  height: calc(100vh - 70px);
+  overflow: hidden;
+  overflow-y: scroll;
 }
 
 :root {

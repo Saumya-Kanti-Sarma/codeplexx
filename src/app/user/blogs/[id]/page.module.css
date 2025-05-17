@@ -1,0 +1,33 @@
+.blogContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #111;
+  padding: 0 2rem;
+}
+
+.blogContent h1,
+.blogContent h2,
+.blogContent h3 {
+  color: var(--primary-green);
+  /* Your palette */
+  margin-top: 1.5rem;
+}
+
+.blogContent p {
+  line-height: 1.8;
+  margin-bottom: 1rem;
+}
+
+.blogContent code {
+  background-color: var(--black);
+  padding: 0.2rem 0.4rem;
+  font-size: 0.95rem;
+  border-radius: 4px;
+}
+
+.blogContent pre {
+  background-color: var(--black);
+  padding: 1rem;
+  overflow-x: auto;
+  border-radius: 6px;
+}
