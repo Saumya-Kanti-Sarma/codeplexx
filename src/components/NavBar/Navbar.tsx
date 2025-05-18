@@ -2,14 +2,16 @@
 import Link from "next/link";
 import styles from "./page.module.css";
 import { useState } from "react";
+import { useUserStore } from "../../../store/zestStore/Store";
 
 const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
+  const { name, email, profile, id } = useUserStore();
 
   return (
     <nav className={styles.nav}>
       <h1 className={styles.h1Logo}>
-        <Link href={""}>
+        <Link href={"/user/home"}>
           Code <br /> Plexx
         </Link>
       </h1>
@@ -26,9 +28,9 @@ const Navbar = () => {
         </button>
       </div>
       <button className={styles.profileBtn}>
-        <Link href={""}>
-          <img src="/icons/pfp.svg" alt="Profile" />
-          Sign-up
+        <Link href={profile ? `/user/profile/ ${id}` : "/"}>
+          <img src={profile || "/icons/pfp.svg"} alt="Profile" />
+          {name || "Sign-up"}
         </Link>
       </button>
     </nav>

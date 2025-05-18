@@ -7,7 +7,7 @@ import { supabase } from "./libs/suprabaseClient";
 import { toast } from "react-hot-toast";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-
+import { useUserStore } from "../../store/zestStore/Store";
 
 export default function Home() {
   const [isLogin, setIsLogin] = useState(false);
@@ -17,6 +17,8 @@ export default function Home() {
     password: "",
   });
   const router = useRouter()
+
+  const setUser = useUserStore((state) => state.setUser);
 
   useEffect(() => {
     const userCredentials = Cookies.get("userCredentials");
@@ -85,8 +87,16 @@ export default function Home() {
       toast.error("Username already exists, please try another");
       toast.dismiss(loading);
       return;
-    }
+    };
     Cookies.set("userCredentials", `${formData.email}${data.user?.id}${Date.now()}`)
+
+    // Update Zustand store
+    setUser({
+      id: data.user?.id || "",
+      name: formData.name,
+      email: formData.email,
+      profile: "" // You can add profile picture later
+    });
 
     toast.success(`Welcome ${formData.name}!`);
     toast.dismiss(loading);
@@ -102,13 +112,30 @@ export default function Home() {
     });
     if (error) {
       toast.error(`Invalid Login Credentials`);
-      console.log({
-        success: false, error,
-      });
+      //console.log({success: false, error,});
       toast.dismiss(loading);
       return
     };
-    console.log(data);
+
+    // Update Zustand store
+    const { data: userDataArray, error: userError } = await supabase.from("users").select("name, email,profile").eq("email", formData.email.trim());
+
+    if (userError || !userDataArray || userDataArray.length === 0) {
+      toast.error("Failed to get user credentials");
+      toast.dismiss(loading);
+      return;
+    }
+    const userData = userDataArray[0];
+    //console.log(userData);
+
+    setUser({
+      id: data.user?.id,
+      name: userData?.name,
+      email: userData?.email,
+      profile: userData?.profile  // You can add profile picture later
+    });
+
+    //console.log(data);
     toast.dismiss(loading);
     toast.success("Welcome Back " + formData.name);
     Cookies.set("userCredentials", `${formData.email}${data.user?.id}${Date.now()}`);
