@@ -9,7 +9,8 @@ interface InpProps {
   inpId?: string;
   inpPlaceholder?: string;
   inpOnChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  inpValue?: string | number | readonly string[]
+  inpValue?: string | number | readonly string[],
+  required?: boolean
 }
 
 const Input: React.FC<InpProps> = ({
@@ -19,7 +20,8 @@ const Input: React.FC<InpProps> = ({
   inpId = "inpId",
   inpPlaceholder = 'Enter text here',
   inpOnChange,
-  inpValue
+  inpValue,
+  required = false,
 }) => {
   return (
     <div className={styles.div}>
@@ -32,6 +34,7 @@ const Input: React.FC<InpProps> = ({
         className={styles.input}
         onChange={inpOnChange}
         value={inpValue}
+        required={required}
       />
     </div>
   );

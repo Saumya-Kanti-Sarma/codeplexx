@@ -3,6 +3,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import Navbar from "@/components/NavBar/Navbar";
+import { Toaster } from "react-hot-toast";
 
 
 
@@ -28,7 +29,11 @@ export default function RootLayout({
 
       </head>
       <body>
+        <Toaster position='top-center' reverseOrder={false} />
         {children}
+        <br />
+        <br />
+        <br />
       </body>
     </html>
   );

@@ -1,38 +1,118 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Input from "@/components/Input/Input";
 import Btn from "@/components/Btn/Btn";
 import styles from "./page.module.css";
+import { supabase } from "./libs/suprabaseClient";
+import { toast } from "react-hot-toast";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+
 
 export default function Home() {
   const [isLogin, setIsLogin] = useState(false);
   const [formData, setFormData] = useState({
-    userName: "",
-    userEmail: "",
-    userPassword: "",
+    name: "",
+    email: "",
+    password: "",
   });
+  const router = useRouter()
 
+  useEffect(() => {
+    const userCredentials = Cookies.get("userCredentials");
+    if (userCredentials) {
+      router.push("/user/home");
+    }
+  }, []);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
 
-    // Replace spaces with underscores for username
-    const newValue = id === "userName" ? value.replace(/\s+/g, "_") : value;
+    // Replace spaces with underscores for name
+    const newValue = id === "name" ? value.replace(/\s+/g, "_") : value;
 
     setFormData((prev) => ({
       ...prev,
-      [id]: newValue,
+      [id]: newValue.trim(),
     }));
   };
 
-  const handleCreateAccount = (e: React.FormEvent) => {
+  const handleCreateAccount = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Creating account with:", formData);
+    const loading = toast.loading("Creating account...");
+
+    // Step 1: Check if email already exists in 'users' table
+    const { data: existingUsers, error: fetchError } = await supabase
+      .from("users")
+      .select("id")
+      .or(`email.eq.${formData.email},name.eq.${formData.name}`);
+
+
+    if (fetchError) {
+      console.error(fetchError);
+      toast.error("Something went wrong");
+      toast.dismiss(loading);
+      return;
+    }
+
+    if (existingUsers && existingUsers.length > 0) {
+      toast.error("Email already used, please try another");
+      toast.dismiss(loading);
+      return;
+    }
+
+    // Step 2: Sign up user with Supabase Auth
+    const { data, error } = await supabase.auth.signUp({
+      email: formData.email.trim(),
+      password: formData.password.trim(),
+    });
+
+    if (error) {
+      console.error(error);
+      toast.error("Cannot Sign-up");
+      toast.dismiss(loading);
+      return;
+    }
+
+    // Step 3: Insert additional user profile info
+    const { error: userError } = await supabase.from("users").insert({
+      id: data.user?.id,
+      name: formData.name,
+      password: formData.password,
+      email: formData.email.trim(),
+    });
+
+    if (userError?.code === "23505") {
+      toast.error("Username already exists, please try another");
+      toast.dismiss(loading);
+      return;
+    }
+    Cookies.set("userCredentials", `${formData.email}${data.user?.id}${Date.now()}`)
+
+    toast.success(`Welcome ${formData.name}!`);
+    toast.dismiss(loading);
   };
 
-  const handleLogin = (e: React.FormEvent) => {
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const { userName, userPassword } = formData;
-    console.log("Logging in with:", { userName, userPassword });
+    const loading = toast.loading("Loging..");
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: formData.email.trim(),
+      password: formData.password.trim()
+    });
+    if (error) {
+      toast.error(`Invalid Login Credentials`);
+      console.log({
+        success: false, error,
+      });
+      toast.dismiss(loading);
+      return
+    };
+    console.log(data);
+    toast.dismiss(loading);
+    toast.success("Welcome Back " + formData.name);
+    Cookies.set("userCredentials", `${formData.email}${data.user?.id}${Date.now()}`);
+    router.push("/user/home")
   };
 
   return (
@@ -46,35 +126,37 @@ export default function Home() {
       <div className={styles.fomrArea}>
         <form
           className={styles.form}
-          onSubmit={isLogin ? handleLogin : handleCreateAccount}
         >
-          <Input
-            h3="Your Name"
-            inpPlaceholder="Enter Your Name Here.."
-            inpId="userName"
-            inpType="text"
-            inpValue={formData.userName}
-            inpOnChange={handleInputChange}
-          />
-
           {!isLogin && (
             <Input
-              h3="Your Email"
-              inpPlaceholder="Enter Your Email Here.."
-              inpId="userEmail"
-              inpType="email"
-              inpValue={formData.userEmail}
+              h3="Your Name"
+              inpPlaceholder="Enter Your Name Here.."
+              inpId="name"
+              inpType="text"
+              inpValue={formData.name}
               inpOnChange={handleInputChange}
+              required={true}
             />
           )}
 
           <Input
+            h3="Your Email"
+            inpPlaceholder="Enter Your Email Here.."
+            inpId="email"
+            inpType="email"
+            inpValue={formData.email}
+            inpOnChange={handleInputChange}
+            required={true}
+          />
+
+          <Input
             h3="Your Password"
             inpPlaceholder="Enter Your Password Here.."
-            inpId="userPassword"
+            inpId="password"
             inpType="password"
-            inpValue={formData.userPassword}
+            inpValue={formData.password}
             inpOnChange={handleInputChange}
+            required={true}
           />
 
           <div className={styles.btnDiv}>
@@ -82,10 +164,7 @@ export default function Home() {
               text={isLogin ? "Login" : "Create Account"}
               width="100%"
               bgColor="--primary-green"
-              onClick={(e) => {
-                e.preventDefault();
-                isLogin ? handleLogin(e) : handleCreateAccount(e);
-              }}
+              onClick={isLogin ? handleLogin : handleCreateAccount}
             />
             <Btn
               text={isLogin ? "Switch to Sign Up" : "Login"}
