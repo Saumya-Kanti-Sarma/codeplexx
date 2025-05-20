@@ -1,19 +1,23 @@
 "use client";
 import styles from './page.module.css';
-import data from "../../../data.js";
-import { truncateTxt } from '@/hooks/Truncate';
 interface pfpProps {
-
+  img: string,
+  name: string,
+  about: string
 }
-const Profile: React.FC<pfpProps> = ({ }) => {
+const Profile: React.FC<pfpProps> = ({
+  img = "/icons/pfp.svg",
+  name = "",
+  about = ""
+}) => {
   return (
     <div className={styles.pfpWraper}>
       <section className={styles.imgWraper}>
-        <img src={data[0].pfp} alt={data[0].pfp} className={styles.pfpImg} />
+        <img src={img} alt={img} className={styles.pfpImg} />
       </section>
       <section className={styles.txtWraper}>
-        <h1>{data[0].user.name}</h1>
-        <p>{truncateTxt(data[0].user.about, 200, "..")}</p>
+        <h1>{name}</h1>
+        <p>{about}</p>
       </section>
     </div>
   )

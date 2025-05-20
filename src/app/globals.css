@@ -8,6 +8,7 @@
 html,
 body {
   height: 100%;
+  min-height: 500px;
   overflow: hidden;
   /* navbar stays at top, no body scroll */
 }

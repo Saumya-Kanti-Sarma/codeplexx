@@ -8,6 +8,8 @@ import { toast } from "react-hot-toast";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "../../store/zestStore/Store";
+import axios from "axios";
+import { error } from "console";
 
 export default function Home() {
   const [isLogin, setIsLogin] = useState(false);
@@ -16,21 +18,13 @@ export default function Home() {
     email: "",
     password: "",
   });
-  const router = useRouter()
-
+  const router = useRouter();
   const setUser = useUserStore((state) => state.setUser);
 
-  useEffect(() => {
-    const userCredentials = Cookies.get("userCredentials");
-    if (userCredentials) {
-      router.push("/user/home");
-    }
-  }, []);
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
-
     // Replace spaces with underscores for name
-    const newValue = id === "name" ? value.replace(/\s+/g, "_") : value;
+    const newValue = id === "name" ? value.replace(/\s+/g, "_").toLowerCase() : value;
 
     setFormData((prev) => ({
       ...prev,
@@ -40,106 +34,79 @@ export default function Home() {
 
   const handleCreateAccount = async (e: React.FormEvent) => {
     e.preventDefault();
-    const loading = toast.loading("Creating account...");
-
-    // Step 1: Check if email already exists in 'users' table
-    const { data: existingUsers, error: fetchError } = await supabase
-      .from("users")
-      .select("id")
-      .or(`email.eq.${formData.email},name.eq.${formData.name}`);
-
-
-    if (fetchError) {
-      console.error(fetchError);
-      toast.error("Something went wrong");
-      toast.dismiss(loading);
-      return;
-    }
-
-    if (existingUsers && existingUsers.length > 0) {
-      toast.error("Email already used, please try another");
-      toast.dismiss(loading);
-      return;
-    }
-
-    // Step 2: Sign up user with Supabase Auth
-    const { data, error } = await supabase.auth.signUp({
-      email: formData.email.trim(),
-      password: formData.password.trim(),
-    });
-
-    if (error) {
-      console.error(error);
-      toast.error("Cannot Sign-up");
-      toast.dismiss(loading);
-      return;
-    }
-
-    // Step 3: Insert additional user profile info
-    const { error: userError } = await supabase.from("users").insert({
-      id: data.user?.id,
+    let loading = toast.loading("Creating account...");
+    const loginData = {
       name: formData.name,
-      password: formData.password,
-      email: formData.email.trim(),
-    });
+      password: formData.password
+    }
+    try {
+      const data = await axios.post("/api/user", loginData);
+      console.log(data.data);
 
-    if (userError?.code === "23505") {
-      toast.error("Username already exists, please try another");
+      if (data.data.status == 200) {
+        Cookies.set("userLoginCredential", `${data.data.data.created_at}${Date.now()}${data.data.data.id}`)
+        setUser({
+          id: data.data.data.id,
+          name: data.data.data.name,
+          email: data.data.data.email,
+          profile: data.data.data.img,
+          about: data.data.data.about,
+        });
+        toast.success(data.data.message);
+        toast.dismiss(loading);
+        toast("redirecting.. please wait");
+        router.push("/user/home")
+      }
+      if (data.data.error.code == "23505") {
+        toast.error("Account already exist. please try login")
+      }
+    } catch (error) {
+      toast.error("cannot create account, please try again later");
+      console.log(error);
+    }
+    finally {
       toast.dismiss(loading);
-      return;
-    };
-    Cookies.set("userCredentials", `${formData.email}${data.user?.id}${Date.now()}`)
+    }
 
-    // Update Zustand store
-    setUser({
-      id: data.user?.id || "",
-      name: formData.name,
-      email: formData.email,
-      profile: "" // You can add profile picture later
-    });
-
-    toast.success(`Welcome ${formData.name}!`);
-    toast.dismiss(loading);
   };
-
-
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    const loading = toast.loading("Loging..");
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: formData.email.trim(),
-      password: formData.password.trim()
-    });
-    if (error) {
-      toast.error(`Invalid Login Credentials`);
-      //console.log({success: false, error,});
-      toast.dismiss(loading);
-      return
-    };
+    let loading = toast.loading("Login...");
+    try {
+      const data = await axios.post("/api/login", formData);
+      const response = await data.data;
+      console.log(response);
 
-    // Update Zustand store
-    const { data: userDataArray, error: userError } = await supabase.from("users").select("name, email,profile").eq("email", formData.email.trim());
-
-    if (userError || !userDataArray || userDataArray.length === 0) {
-      toast.error("Failed to get user credentials");
-      toast.dismiss(loading);
-      return;
+      if (response.status == 200) {
+        Cookies.set("userLoginCredential", `${response.data.created_at}${Date.now()}${response.data.id}`)
+        setUser({
+          id: response.data.id,
+          name: response.data.name,
+          email: response.data.email,
+          profile: response.data.img,
+          about: response.data.about,
+        });
+        toast.success(data.data.message);
+        toast.dismiss(loading);
+        toast("redirecting.. please wait");
+        router.push("/user/home")
+      };
+      if (data.data.status == 500) {
+        toast.error(response.data.message);
+        toast.dismiss(loading);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        toast.error(error.response.data.message);
+        console.log(error);
+      } else {
+        toast.error("An unexpected error occurred.");
+        console.log(error);
+      }
     }
-    const userData = userDataArray[0];
-    //console.log(userData);
-
-    setUser({
-      id: data.user?.id,
-      name: userData?.name,
-      email: userData?.email,
-      profile: userData?.profile  // You can add profile picture later
-    });
-
-    //console.log(data);
-    toast.dismiss(loading);
-    toast.success("Welcome Back " + formData.name);
-    Cookies.set("userCredentials", `${formData.email}${data.user?.id}${Date.now()}`);
-    router.push("/user/home")
+    finally {
+      toast.dismiss(loading);
+    }
   };
 
   return (
@@ -154,31 +121,34 @@ export default function Home() {
         <form
           className={styles.form}
         >
-          {!isLogin && (
-            <Input
-              h3="Your Name"
-              inpPlaceholder="Enter Your Name Here.."
-              inpId="name"
-              inpType="text"
-              inpValue={formData.name}
-              inpOnChange={handleInputChange}
-              required={true}
-            />
-          )}
 
           <Input
-            h3="Your Email"
-            inpPlaceholder="Enter Your Email Here.."
-            inpId="email"
-            inpType="email"
-            inpValue={formData.email}
+            h3="Your Name"
+            inpPlaceholder="Enter Your Name Here.."
+            inpId="name"
+            inpName="name"
+            inpType="text"
+            inpValue={formData.name}
             inpOnChange={handleInputChange}
             required={true}
           />
 
+          {!isLogin && (
+            <Input
+              h3="Your Email"
+              inpPlaceholder="Enter Your Email Here.."
+              inpId="email"
+              inpName="email"
+              inpType="email"
+              inpValue={formData.email}
+              inpOnChange={handleInputChange}
+              required={true}
+            />
+          )}
           <Input
             h3="Your Password"
             inpPlaceholder="Enter Your Password Here.."
+            inpName="password"
             inpId="password"
             inpType="password"
             inpValue={formData.password}

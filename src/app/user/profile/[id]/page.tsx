@@ -1,15 +1,21 @@
 "use client"
-
-// /user/profile/:id
-import { useParams } from "next/navigation";
+import Profile from "@/components/Profile/Profile";
+import styles from "./page.module.css";
+import { compareHash, hash } from "@/app/libs/hashPasswords";
 
 export default function page() {
-  const searchParams = useParams<{ id: string }>();
-  const id = searchParams.id;
+
   return (
     <>
-      this is profile page of id: {id}
+      <main className={styles.main}>
+        <Profile
+          img="/icons/pfp.svg"
+          name="Name"
+          about="write your about here"
+        />
+        <p>{hash("Securepassword")}</p>
+        <p>{compareHash("Securepassword", "a6bd432dce393e5ec44172788be225bac1b6129de4a3d5dfabd89fd548f6c4ca")}</p>
+      </main>
     </>
   );
 }
-// how to properly get the id

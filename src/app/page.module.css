@@ -36,7 +36,7 @@
 }
 
 .form {
-  width: calc(100% - 20px);
+  width: calc(100% - 200px);
   padding: 0 10px;
   overflow: hidden;
   display: flex;
@@ -69,6 +69,10 @@
     align-items: start;
   }
 
+  .form {
+    width: calc(100% - 40px);
+  }
+
   .aside h1:hover {
     color: var(--primary-green);
     transform: none;
@@ -76,6 +80,10 @@
 }
 
 @media (max-width:480px) {
+  .form {
+    width: calc(100% -10px);
+  }
+
   .aside h1 {
     font-size: 5rem;
   }
