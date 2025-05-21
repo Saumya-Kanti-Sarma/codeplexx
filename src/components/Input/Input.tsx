@@ -3,11 +3,13 @@ import React from 'react';
 import styles from './page.module.css';
 
 interface InpProps {
-  h3: string;
+  h3?: string;
   inpType?: React.HTMLInputTypeAttribute;
   inpName?: string;
   inpId?: string;
   inpPlaceholder?: string;
+  inpHeight?: string;
+  inpTextAlign?: React.CSSProperties['textAlign'];
   inpOnChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   inpValue?: string | number | readonly string[],
   required?: boolean
@@ -20,6 +22,8 @@ const Input: React.FC<InpProps> = ({
   inpId = "inpId",
   inpPlaceholder = 'Enter text here',
   inpOnChange,
+  inpHeight,
+  inpTextAlign = "start",
   inpValue,
   required = false,
 }) => {
@@ -35,6 +39,10 @@ const Input: React.FC<InpProps> = ({
         onChange={inpOnChange}
         value={inpValue}
         required={required}
+        style={{
+          height: inpHeight,
+          textAlign: inpTextAlign,
+        }}
       />
     </div>
   );

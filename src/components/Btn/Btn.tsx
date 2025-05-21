@@ -1,10 +1,10 @@
 "use client";
 import styles from "./page.module.css"
 interface BtnProps {
-  text: string;
+  text?: string;
   onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  bgColor: string;
-  width: string
+  bgColor?: string;
+  width?: string
 
 }
 const Btn: React.FC<BtnProps> = ({ text = "Button", onClick, bgColor = "--primary-green", width }) => {
