@@ -1,28 +1,35 @@
-"use Client";
-
+"use client";;
 import type { Metadata } from "next";
 import "./globals.css";
-import Navbar from "@/components/NavBar/Navbar";
 import { Toaster } from "react-hot-toast";
-
-
-
-export const metadata: Metadata = {
-  title: "Get Started with Code Plexx",
-  description: "All your need is here!",
-  icons: {
-    icon: "/icons/cplexx.png"
-  }
-};
+import { useEffect } from "react";
+import Cookies from "js-cookie";
+import { useUserStore } from "../../store/zestStore/Store";
+import axios from "axios";
 
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const setUser = useUserStore((state) => state.setUser);
+  useEffect(() => {
+    const userUUID = Cookies.get("user_UUID");
+    if (userUUID) {
+      setUser({
+        name: Cookies.get("name"),
+        email: Cookies.get("email"),
+        profile: Cookies.get("img"),
+        about: Cookies.get("about"),
+        id: Cookies.get("id"),
+      })
+    };
+  }, [])
   return (
     <html >
       <head>
+        <title>Get started with Code plexx</title>
+        <link rel="icon" type="image/x-icon" href="/icons/cplexx.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap" rel="stylesheet" />

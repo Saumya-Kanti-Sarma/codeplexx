@@ -5,15 +5,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 10px;
-}
-
-.pfpWraper section {
-  flex: 1;
-  height: 100%;
+  padding: 0 10px;
 }
 
 .imgWraper {
+  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -26,6 +22,7 @@
 }
 
 .txtWraper {
+  flex: 1;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -42,6 +39,11 @@
   white-space: pre-line;
 }
 
+.readMore {
+  border: none;
+  background-color: transparent;
+  color: rgb(42, 42, 250);
+}
 
 @media (max-width: 690px) {
   .pfpWraper {
@@ -54,6 +56,7 @@
 
 
   .txtWraper {
+    flex: 2;
     gap: 3px;
     overflow: hidden;
   }

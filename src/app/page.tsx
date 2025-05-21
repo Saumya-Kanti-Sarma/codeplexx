@@ -1,15 +1,13 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Input from "@/components/Input/Input";
 import Btn from "@/components/Btn/Btn";
 import styles from "./page.module.css";
-import { supabase } from "./libs/suprabaseClient";
 import { toast } from "react-hot-toast";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "../../store/zestStore/Store";
 import axios from "axios";
-import { error } from "console";
 
 export default function Home() {
   const [isLogin, setIsLogin] = useState(false);
@@ -45,6 +43,11 @@ export default function Home() {
 
       if (data.data.status == 200) {
         Cookies.set("userLoginCredential", `${data.data.data.created_at}${Date.now()}${data.data.data.id}`)
+        Cookies.set("user_UUID", data.data.data.id);
+        const cookieFields = ["name", "email", "img", "about", "id"];
+        cookieFields.forEach(field => {
+          Cookies.set(field, data.data.data[field]);
+        });
         setUser({
           id: data.data.data.id,
           name: data.data.data.name,
@@ -79,6 +82,11 @@ export default function Home() {
 
       if (response.status == 200) {
         Cookies.set("userLoginCredential", `${response.data.created_at}${Date.now()}${response.data.id}`)
+        Cookies.set("user_UUID", response.data.id);
+        const cookieFields = ["name", "email", "img", "about", "id"];
+        cookieFields.forEach(field => {
+          Cookies.set(field, response.data[field]);
+        });
         setUser({
           id: response.data.id,
           name: response.data.name,
