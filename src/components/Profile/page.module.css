@@ -17,6 +17,7 @@
 
 .pfpImg {
   width: 150px;
+  object-fit: cover;
   aspect-ratio: 1/1;
   border-radius: 100%;
 }
@@ -96,5 +97,9 @@
 @media (max-width: 510px) {
   .editBtn {
     opacity: 1;
+  }
+
+  .pfpImg {
+    width: 80px;
   }
 }

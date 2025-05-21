@@ -31,6 +31,8 @@
 .profileBtn a img {
   width: 40px;
   height: 40px;
+  object-fit: cover;
+  border-radius: 100%;
 
 }
 
@@ -64,4 +66,24 @@
 .searchArea button img {
   height: 30px;
   width: 30px;
+}
+
+@media (max-width: 480px) {
+  .h1Logo {
+    font-size: 16px;
+  }
+
+  .searchInp {
+    height: 40px;
+    font-size: 12px;
+  }
+
+  .searchArea button img {
+    height: 20px;
+    width: 20px;
+  }
+
+  .profileBtn a {
+    font-size: 8px;
+  }
 }
