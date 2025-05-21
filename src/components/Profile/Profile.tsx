@@ -1,9 +1,13 @@
 "use client";
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useUserStore } from '../../../store/zestStore/Store';
 import styles from './page.module.css';
 
-const Profile = () => {
+interface profileProps {
+  display: string,
+  onclick?: () => void
+}
+const Profile: React.FC<profileProps> = ({ display, onclick }) => {
   const { name, profile, about } = useUserStore();
   const [wordLimit, setWordLimit] = useState(100);
   const handleWordLimit = () => {
@@ -17,7 +21,12 @@ const Profile = () => {
         <img src={profile || "/icons/pfp.svg"} alt={profile} className={styles.pfpImg} />
       </section>
       <section className={styles.txtWraper}>
-        <h1>{name || "Loading..."}</h1>
+        <div className={styles.headingAndlogo}>
+          <h1>{name || "Loading..."}</h1>
+          <button className={styles.editBtn} style={{ display: display }} onClick={onclick}>
+            <img src="/icons/edit.svg" alt="" />
+          </button>
+        </div>
         <p>
           {about && (
             <>

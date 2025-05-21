@@ -30,6 +30,27 @@
   gap: 10px;
 }
 
+.headingAndlogo {
+  width: 100%;
+  display: flex;
+  justify-content: start;
+  gap: 5px;
+  /* background-color: antiquewhite; */
+
+}
+
+.editBtn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: 0.22s ease-in-out;
+}
+
+.editBtn:hover {
+  opacity: 1;
+}
+
 .txtWraper h1 {
   color: var(--primary-green);
   font-size: xx-large;
@@ -69,5 +90,11 @@
   .txtWraper p {
     white-space: pre-line;
     font-size: x-small;
+  }
+}
+
+@media (max-width: 510px) {
+  .editBtn {
+    opacity: 1;
   }
 }
