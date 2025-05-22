@@ -28,7 +28,7 @@ const Navbar = () => {
         </button>
       </div>
       <button className={styles.profileBtn}>
-        <Link href={name ? `/user/profile/ ${id}` : "/"}>
+        <Link href={name ? `/user/profile/${name}` : "/"}>
           <img src={profile || "/icons/pfp.svg"} alt="Profile" />
           {name || "Sign-up"}
         </Link>

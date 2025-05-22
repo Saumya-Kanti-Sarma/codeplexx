@@ -5,9 +5,11 @@
   justify-content: center;
   align-items: center;
   gap: 10px;
+  background-color: #0000000e;
 }
 
-.wraper section {
+.imgSection,
+.textSection {
   flex: 1;
   height: 100%;
 }
@@ -19,8 +21,7 @@
 }
 
 .imgSection img {
-  height: 100%;
-  width: 90%;
+  width: 60%;
   aspect-ratio: 16/9;
   object-fit: cover;
 }

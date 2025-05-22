@@ -1,11 +1,10 @@
 "use client";;
-import type { Metadata } from "next";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 import { useUserStore } from "../../store/zestStore/Store";
-import axios from "axios";
+
 
 export default function RootLayout({
   children,

@@ -12,19 +12,35 @@
 
 .contentArea {
   width: 100vw;
+  height: calc(80vh-60px);
   max-width: 1200px;
   display: flex;
   justify-content: center;
+  background-color: aquamarine;
+  overflow: hidden;
+  overflow-y: auto;
 }
 
 .btnArea {
   display: flex;
-  justify-content: space-evenly;
+  justify-content: end;
+  align-items: center;
+  gap: 20px;
   width: 100%;
 }
 
+.allPosts {
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: start;
+  gap: 5px;
+
+}
 
 .create {
+  height: auto;
   /* background-color: yellow; */
   display: flex;
   flex-direction: column;
