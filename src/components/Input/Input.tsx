@@ -37,7 +37,7 @@ const Input: React.FC<InpProps> = ({
         placeholder={inpPlaceholder}
         className={styles.input}
         onChange={inpOnChange}
-        value={inpValue}
+        {...(inpType !== "file" ? { value: inpValue } : {})}
         required={required}
         style={{
           height: inpHeight,

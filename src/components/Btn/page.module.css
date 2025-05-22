@@ -7,6 +7,10 @@
   border-radius: 12px;
   font-size: larger;
   transition: 0.22s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
 }
 
 .btn:hover {
