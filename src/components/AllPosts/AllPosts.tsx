@@ -56,7 +56,7 @@ const AllPosts = () => {
           category={item.category}
           title={`${item.title}`}
           date={`${item.created_at}`}
-          link={`/users/blogs/${item.title}`}
+          link={`/user/blogs/${item.title}`}
           about={`${item.content}`}
         />
       ))}
