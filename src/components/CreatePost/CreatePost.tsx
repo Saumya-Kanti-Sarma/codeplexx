@@ -9,7 +9,6 @@ import toast from "react-hot-toast";
 
 const CreatePost = () => {
   const { name, id } = useUserStore();
-  const [postDisplay, setPostDisplay] = useState(true);
   const [disableBtn, setDisableBtn] = useState(true);
   const [btnLoader, setBtnLoader] = useState(false);
   const [btnText, setBtnText] = useState("Upload");

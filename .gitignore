@@ -10,6 +10,7 @@
 !.yarn/releases
 !.yarn/versions
 data
+data.js
 # testing
 /coverage
 markdown.txt

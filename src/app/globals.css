@@ -14,9 +14,14 @@ body {
 }
 
 #main-container {
-  height: calc(100vh - 70px);
+  height: 100vh;
   overflow: hidden;
   overflow-y: scroll;
+  min-height: 500px;
+}
+
+#main-container::-webkit-scrollbar {
+  display: none;
 }
 
 :root {

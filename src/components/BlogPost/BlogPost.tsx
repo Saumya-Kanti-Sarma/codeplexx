@@ -7,7 +7,7 @@ import Markdown from "react-markdown";
 
 interface BlogProps {
   img?: string,
-  category?: [],
+  category?: string[],
   title: string,
   date: string,
   link: string,
@@ -22,24 +22,28 @@ const BlogPost: React.FC<BlogProps> = ({
   about,
 }) => {
   return (
-    <div className={styles.wraper}>
-      <section className={styles.imgSection}>
-        <img src={img || "/def/def-img.jpeg"} alt={img} />
-      </section>
-      <section className={styles.textSection}>
-        <div className={styles.category}>{
-          <p>
-            {category?.join(" • ")}
-          </p>
-        }
-        </div>
-        <Link href={link}><h1 className={styles.h1}>{truncateTxt(title, 70, "...")}</h1></Link>
-        <Markdown>
-          {`${truncateTxt(about, 100, "...")}`}
-        </Markdown>
-        <p className={styles.author}>{truncateTxt(date, 16, "")}</p>
-      </section>
-    </div>
+    <Link href={link} className={styles.link}>
+      <div className={styles.wraper}>
+        <section className={styles.imgSection}>
+          <img src={img || "/def/def-img.jpeg"} alt={img} />
+        </section>
+        <section className={styles.textSection}>
+          <div className={styles.category}>{
+            <p>
+              {category?.join(" • ")}
+            </p>
+          }
+          </div>
+          <h1 className={styles.h1}>{truncateTxt(title, 70, "...")}</h1>
+          <section className={styles.about}>
+            <Markdown>
+              {`${truncateTxt(about, window.innerWidth < 600 ? 100 : 200, "...")}`}
+            </Markdown>
+          </section>
+          <p className={styles.author}>{truncateTxt(date, 16, "")}</p>
+        </section>
+      </div>
+    </Link>
   )
 }
 

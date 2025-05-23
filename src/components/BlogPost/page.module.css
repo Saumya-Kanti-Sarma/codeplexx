@@ -1,15 +1,25 @@
+.link {
+  text-decoration: none;
+  color: black;
+}
+
 .wraper {
   max-width: 1200px;
   height: 210px;
   display: flex;
-  justify-content: center;
+  justify-content: start;
   align-items: center;
   gap: 10px;
-  background-color: #0000000e;
+  margin: 10px;
+  margin-bottom: 0;
+  transition: 0.122s ease-in-out;
 }
 
-.imgSection,
-.textSection {
+.wraper:hover {
+  transform: scale(1.01);
+}
+
+.imgSection {
   flex: 1;
   height: 100%;
 }
@@ -21,15 +31,23 @@
 }
 
 .imgSection img {
-  width: 60%;
+  height: 100%;
+  min-width: 150px;
   aspect-ratio: 16/9;
   object-fit: cover;
 }
 
 .textSection {
+  flex: 2;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.about {
+  opacity: 0.9;
+  color: #084fb9;
 }
 
 .category {
@@ -44,29 +62,52 @@
   opacity: 0.56;
 }
 
+@media (max-width: 900px) {
+  .wraper {
+    height: 160px;
+  }
+
+  .about p {
+    font-size: small;
+  }
+}
+
+@media (max-width: 890px) {
+
+  .author {
+    display: none;
+  }
+}
+
 @media (max-width: 690px) {
   .wraper {
-    height: 140px;
+    height: 120px;
   }
 
   .h1 {
     font-size: large;
   }
 
-  .author {
-    font-size: small;
+  .textSection {
+    align-items: start;
+    justify-content: start;
+  }
+
+  .category {
+    display: none;
   }
 }
 
 @media (max-width: 480px) {
-
-
-  .h1,
-  .category {
-    font-size: small;
+  .wraper {
+    height: 80px;
   }
 
-  .author {
+  .about p {
+    font-size: xx-small;
+  }
+
+  .h1 {
     font-size: small;
   }
 }

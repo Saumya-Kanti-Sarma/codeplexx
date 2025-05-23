@@ -1,15 +1,14 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import styles from "./page.module.css";
 import { useUserStore } from '../../../store/zestStore/Store';
 import axios from 'axios';
 import BlogPost from '../BlogPost/BlogPost';
-
+import Loader from '../Loaders/Loader';
 const AllPosts = () => {
   const { id } = useUserStore();
   type BlogData = {
     image_url: string;
-    category: [];
+    category?: string[],
     // Add other properties as needed, e.g. title, author, date, link
     title?: string;
     author?: string;
@@ -19,35 +18,51 @@ const AllPosts = () => {
     content?: string;
   };
   const [data, setData] = useState<BlogData[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function GetBlogs(from: number, to: number) {
+      setLoading(true);
       const reqData = await axios.get(`/api/blogs?id=${id}&from=${from}&to=${to}`);
-      const response = await reqData.data.data;
-      setData(response)
-    };
-    GetBlogs(0, 10);// i asked only 2 response still got entite db's data
-    console.log(id);
+      console.log(reqData);
+      setData(reqData.data.data);
+      setLoading(false);
+    }
+    GetBlogs(0, 10);
   }, [id]);
+
+  if (loading) return (
+    <div style={{
+      width: "200px",
+      height: "200px",
+      margin: "0 auto",
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center"
+    }}>
+      <Loader />
+    </div>
+  );
+  <>
+    No posts found
+
+  </>
   return (
     <>
-      {data && data.length > 0 ?
-        data.map((item, index) => (
-          <>
-            <BlogPost
-              img={`${item?.image_url || "/def/def-img.jpeg"}`}
-              category={item.category}
-              title={`${item.title}`}
-              date={`${item.created_at}`}
-              link={`/users/blogs/${item.title}`}
-              about={`${item.content}`}
-            />
-          </>
-        ))
-
-        : <>loading</>}
+      {data && data.map((item, index) => (
+        <BlogPost
+          key={index}
+          img={item?.image_url || "/def/def-img.jpeg"}
+          category={item.category}
+          title={`${item.title}`}
+          date={`${item.created_at}`}
+          link={`/users/blogs/${item.title}`}
+          about={`${item.content}`}
+        />
+      ))}
+      <br />
+      <hr />
     </>
-  )
-}
-
+  );
+};
 export default AllPosts

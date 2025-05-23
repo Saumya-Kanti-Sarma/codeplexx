@@ -6,6 +6,9 @@
   justify-content: center;
   align-items: center;
   padding: 0 10px;
+  gap: 10px;
+  /* border: 1px solid black; */
+  margin-top: 15px;
 }
 
 .imgWraper {
@@ -13,22 +16,26 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  /* background-color: #d34040; */
+  height: 100%;
 }
 
 .pfpImg {
-  width: 150px;
+  height: 100%;
   object-fit: cover;
   aspect-ratio: 1/1;
   border-radius: 100%;
 }
 
 .txtWraper {
-  flex: 1;
+  flex: 3;
+  /* background-color: #c78e8e; */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: start;
   align-items: start;
   gap: 10px;
+  height: 100%;
 }
 
 .headingAndlogo {
@@ -72,13 +79,7 @@
     height: 140px;
   }
 
-  .pfpImg {
-    width: 100px;
-  }
-
-
   .txtWraper {
-    flex: 2;
     gap: 3px;
     overflow: hidden;
   }
@@ -99,7 +100,8 @@
     opacity: 1;
   }
 
-  .pfpImg {
-    width: 80px;
+  .pfpWraper {
+    height: 100px;
+    margin-top: 1px;
   }
 }
