@@ -53,7 +53,8 @@ export async function PUT(req: NextRequest) {
   const { data, error } = await supabase
     .from("blogs")
     .update([{ title, content, image_url, tags }])
-    .eq("id", id);
+    .eq("id", id)
+    .eq("user_id", searchParams.get("user_id"));
   if (error) {
     return NextResponse.json({
       status: 400,
@@ -74,7 +75,8 @@ export async function DELETE(req: NextRequest) {
   const { data, error } = await supabase
     .from("blogs")
     .delete()
-    .eq("id", id);
+    .eq("id", id)
+    .eq("user_id", searchParams.get("user_id"));
 
   if (error) {
     return NextResponse.json({
