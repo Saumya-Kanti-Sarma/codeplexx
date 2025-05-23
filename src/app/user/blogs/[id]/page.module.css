@@ -5,6 +5,29 @@
   padding: 0 2rem;
 }
 
+.title {
+  text-align: center;
+  font-size: 40px;
+}
+
+.blogImgholder {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+}
+
+.blogImg {
+  width: 100%;
+  max-width: 1000px;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  margin: 0 auto;
+
+}
+
 .blogContent h1,
 .blogContent h2,
 .blogContent h3 {
@@ -30,4 +53,16 @@
   padding: 1rem;
   overflow-x: auto;
   border-radius: 6px;
+}
+
+@media (max-width:800px) {
+  .title {
+    font-size: 30px;
+  }
+}
+
+@media (max-width:400px) {
+  .title {
+    font-size: 26px;
+  }
 }

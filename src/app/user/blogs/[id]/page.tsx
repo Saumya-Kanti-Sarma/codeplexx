@@ -1,28 +1,17 @@
-"use client";
-import { useEffect, useState } from "react";
-import styles from "./page.module.css";
-import ReactMarkdown from "react-markdown";
-import rehypeHighlight from "rehype-highlight";
-import "highlight.js/styles/github-dark.css";
+// app/users/blogs/[id]/page.tsx
+import { Metadata } from "next";
+import Blogs from "./Blogs";
 
-export default function Blogs() {
-  const [data, setData] = useState("");
-  useEffect(() => {
-    fetch("/markdown.txt")
-      .then((res) => res.text())
-      .then((txt) => setData(txt))
-      .catch((err) => console.log(err));
-  }, [])
-  return (
-    <>
-      <div className={styles.blogContainer}>
-        <article className={styles.blogContent}>
-          <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
-            {data || "Loading..."}
-          </ReactMarkdown>
-        </article>
-      </div>
-      <br />
-    </>
-  );
+export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
+  const res = await fetch(`http://localhost:3000/api/blogs/one?id=${params.id}`);
+  const blog = await res.json();
+  const data = blog.data[0];
+  return {
+    title: data?.title || "Blog",
+    description: data?.content?.slice(0, 160) || "Blog description",
+  };
+}
+
+export default function Page({ params }: { params: { id: string } }) {
+  return <Blogs id={params.id} />;
 }

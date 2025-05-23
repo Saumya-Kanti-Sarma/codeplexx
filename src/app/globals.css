@@ -24,6 +24,12 @@ body {
   display: none;
 }
 
+.lastDiv {
+  height: 100px;
+  width: 100%;
+  background-color: orange;
+}
+
 :root {
   --primary-green: #0A8834;
   --dark-green: #0c5525;
