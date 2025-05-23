@@ -16,6 +16,7 @@ const AllPosts = () => {
     link?: string;
     created_at?: string;
     content?: string;
+    id?: string;
   };
   const [data, setData] = useState<BlogData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -56,7 +57,7 @@ const AllPosts = () => {
           category={item.category}
           title={`${item.title}`}
           date={`${item.created_at}`}
-          link={`/user/blogs/${item.title}`}
+          link={`/user/blogs/${item.id}`}
           about={`${item.content}`}
         />
       ))}
