@@ -1,8 +1,9 @@
 "use client";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./page.module.css";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
+import remarkGfm from "remark-gfm";
 import "highlight.js/styles/github-dark.css";
 import axios from "axios";
 import { truncateTxt } from "@/hooks/Truncate";
@@ -49,7 +50,7 @@ const Blogs: React.FC<BlogProps> = ({ id }) => {
     <>
       {rawData && rawData.length > 0 ? rawData.map((item, index) =>
         <>
-          <div className={styles.blogContainer}>
+          <div className={styles.blogContainer} key={index}>
             <article className={styles.blogContent}>
               <h1 className={styles.title}>{rawData[0]?.title}</h1>
               <p></p>
@@ -58,9 +59,13 @@ const Blogs: React.FC<BlogProps> = ({ id }) => {
                 <p>posted: {truncateTxt(`${rawData[0]?.created_at}`, 10, "")}</p>
               </div>
               <hr />
-              <ReactMarkdown rehypePlugins={[rehypeHighlight]}>
-                {rawData[0]?.content}
-              </ReactMarkdown>
+              <div className="markdown">
+
+                <ReactMarkdown rehypePlugins={[rehypeHighlight]} remarkPlugins={[remarkGfm]}>
+                  {rawData[0]?.content}
+                </ReactMarkdown>
+              </div>
+
             </article>
             <br />
             {rawData ? <>
@@ -80,7 +85,7 @@ const Blogs: React.FC<BlogProps> = ({ id }) => {
               </>}
             <br />
             <h3>Read More: </h3>
-            <AllPosts />
+            <AllPosts url={`/api/blogs/getAll`} />
             <br />
             <div className="lastDiv"></div>
           </div>

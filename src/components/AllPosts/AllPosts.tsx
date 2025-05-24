@@ -27,7 +27,6 @@ const AllPosts: React.FC<PostParams> = ({ url }) => {
     async function GetBlogs() {
       setLoading(true);
       const reqData = await axios.get(`${url}`);
-      //console.log(reqData);
       setData(reqData.data.data);
       setLoading(false);
     }
@@ -46,10 +45,13 @@ const AllPosts: React.FC<PostParams> = ({ url }) => {
       <Loader />
     </div>
   );
-  <>
-    No posts found
-
-  </>
+  if (data && data.length == 0) {
+    return (
+      <>
+        <p style={{ textAlign: "center" }}>No post Found</p>
+      </>
+    )
+  }
   return (
     <>
       {data && data.map((item, index) => (
@@ -64,7 +66,6 @@ const AllPosts: React.FC<PostParams> = ({ url }) => {
         />
       ))}
       <br />
-      <hr />
     </>
   );
 };

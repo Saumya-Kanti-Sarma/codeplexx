@@ -55,6 +55,25 @@
   border-radius: 6px;
 }
 
+.markdown table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 0.95rem;
+}
+
+.markdown th,
+.markdown td {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: left;
+}
+
+.markdown thead {
+  background-color: #f0f0f0;
+  font-weight: bold;
+}
+
 .loader,
 .smallloader {
   height: calc(100dvh - 200px);

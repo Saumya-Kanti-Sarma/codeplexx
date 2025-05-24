@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import ProfilePage from "./ProfilePage";
 export async function generateMetadata({ params }: { params: { name: string } }): Promise<Metadata> {
-  const req = await fetch(`http://localhost:3000//api/user?name=${params.name}`);
+  const req = await fetch(`${process.env.URL}/api/user?name=${params.name}`);
   const res = await req.json();
   console.log(res);
   return {

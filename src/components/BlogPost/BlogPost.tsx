@@ -12,6 +12,7 @@ interface BlogProps {
   date: string,
   link: string,
   about: string,
+  key: number,
 }
 const BlogPost: React.FC<BlogProps> = ({
   img,
@@ -20,9 +21,10 @@ const BlogPost: React.FC<BlogProps> = ({
   date,
   link,
   about,
+  key
 }) => {
   return (
-    <Link href={link} className={styles.link}>
+    <Link href={link} className={styles.link} key={key}>
       <div className={styles.wraper}>
         <section className={styles.imgSection}>
           <img src={img || "/def/def-img.jpeg"} alt={img} />

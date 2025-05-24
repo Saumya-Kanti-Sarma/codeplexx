@@ -3,7 +3,7 @@ import { Metadata } from "next";
 import Blogs from "./Blogs";
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const res = await fetch(`http://localhost:3000/api/blogs/one?id=${params.id}`);
+  const res = await fetch(`${process.env.URL}/api/blogs/one?id=${params.id}`);
   const blog = await res.json();
   const data = blog.data[0];
   return {
