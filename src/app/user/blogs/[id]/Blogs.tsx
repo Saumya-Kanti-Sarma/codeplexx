@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import styles from "./page.module.css";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
@@ -22,15 +22,27 @@ const Blogs: React.FC<BlogProps> = ({ id }) => {
     image_url: string;
     tags: string[];
     created_at: string;
+  };
+  type UserData = {
+    about: string;
+    created_at: string;
+    email: string;
+    name: string;
+    img: string;
+    id: string;
   }
+
   const [rawData, setData] = useState<blog[]>([]);
+  const [userData, setUserData] = useState<UserData>();
+
+
   useEffect(() => {
     async function GetData() {
       const req = await axios.get(`/api/blogs/one?id=${id}`);
       if (req.status == 200) {
-        //console.log(req.data);
+        // console.log(req.data);
         setData(req.data.data);
-      }
+      };
       if (req.data.data.length < 0) {
         return (
           <>
@@ -39,7 +51,15 @@ const Blogs: React.FC<BlogProps> = ({ id }) => {
         )
       }
     }; GetData();
-  }, [id]);
+
+    async function GetUserData() {
+      const req = await axios.get(`/api/user?id=${rawData[0].user_id}`);
+      if (req.status == 200) {
+        //console.log({ userData: req.data.data[0] });
+        setUserData(req.data.data[0]);
+      };
+    }; GetUserData();
+  }, [id, rawData[0]?.user_id]);
 
   return (
     <>
@@ -59,16 +79,28 @@ const Blogs: React.FC<BlogProps> = ({ id }) => {
               </ReactMarkdown>
             </article>
             <br />
-            <h1>Follow Me: </h1>
-            <Profile display="none" />
+            <h2>Follow Me: </h2>
             <br />
-            <h1>Read More: </h1>
+
+            {userData ? <Profile
+              wrappedlink={`/user/profile/${userData?.id}`}
+              profileImg={userData?.img}
+              profileName={userData?.name}
+              editBtnDisplay={"none"}
+              about={`${truncateTxt(`${userData?.about}`, 100, "...")}`}
+            />
+              :
+              <div className={styles.loader}>
+                <Loader />
+              </div>
+            }
+
+            <br />
+            <h3>Read More: </h3>
             <AllPosts />
             <br />
-            <hr />
             <div className="lastDiv"></div>
           </div>
-          <br />
         </>
       ) : <>
         <div className={styles.loader}>

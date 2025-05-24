@@ -55,6 +55,14 @@
   border-radius: 6px;
 }
 
+.loader {
+  height: calc(100dvh - 200px);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 @media (max-width:800px) {
   .title {
     font-size: 30px;

@@ -14,7 +14,7 @@ body {
 }
 
 #main-container {
-  height: 100vh;
+  height: 100dvh;
   overflow: hidden;
   overflow-y: scroll;
   min-height: 500px;
@@ -28,6 +28,7 @@ body {
   height: 100px;
   width: 100%;
   background-color: orange;
+  margin-bottom: 10px;
 }
 
 :root {
