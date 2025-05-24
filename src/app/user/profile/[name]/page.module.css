@@ -18,12 +18,17 @@
   display: none;
 }
 
-.loader {
+.loader,
+.miniLoader {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   height: calc(28dvh - 71px);
+}
+
+.miniLoader {
+  height: auto;
 }
 
 .profileArea {

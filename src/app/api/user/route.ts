@@ -34,8 +34,8 @@ export async function POST(req: NextRequest) {
 // Get user
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const id = searchParams.get("id");
-  if (!id) {
+  const name = searchParams.get("name");
+  if (!name) {
     return NextResponse.json({
       status: 400,
       message: "No Id was found"
@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
   const { data, error } = await supabase
     .from("users")
     .select("id, name,email,img,created_at,about")
-    .eq("id", id)
+    .eq("name", name)
   if (error) {
     return NextResponse.json({
       status: 500,

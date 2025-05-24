@@ -1,15 +1,17 @@
 "use client"
 import React, { useEffect, useState } from 'react'
-import { useUserStore } from '../../../store/zestStore/Store';
 import axios from 'axios';
 import BlogPost from '../BlogPost/BlogPost';
 import Loader from '../Loaders/Loader';
-const AllPosts = () => {
-  const { id } = useUserStore();
+
+interface PostParams {
+  url?: string,
+}
+const AllPosts: React.FC<PostParams> = ({ url }) => {
+
   type BlogData = {
     image_url: string;
     category?: string[],
-    // Add other properties as needed, e.g. title, author, date, link
     title?: string;
     author?: string;
     date?: string;
@@ -22,15 +24,15 @@ const AllPosts = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function GetBlogs(from: number, to: number) {
+    async function GetBlogs() {
       setLoading(true);
-      const reqData = await axios.get(`/api/blogs?id=${id}&from=${from}&to=${to}`);
-      console.log(reqData);
+      const reqData = await axios.get(`${url}`);
+      //console.log(reqData);
       setData(reqData.data.data);
       setLoading(false);
     }
-    GetBlogs(0, 10);
-  }, [id]);
+    GetBlogs();
+  }, [url]);
 
   if (loading) return (
     <div style={{

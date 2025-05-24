@@ -1,48 +1,79 @@
 "use client";
+import { useEffect, useState } from 'react';
 import Btn from '../Btn/Btn';
 import styles from './page.module.css';
+import axios from 'axios';
+import { truncateTxt } from '@/hooks/Truncate';
 import Link from 'next/link';
 
 interface profileProps {
 
-  wrappedlink?: string,
-  profileImg?: string,
   profileName?: string,
-  editBtnDisplay?: string,
+  editBtnDisplay?: boolean,
   editBtnOnclick?: () => void,
-  about?: string,
-  truncateBtnOnClick?: () => void,
   truncateBtnTxt?: string,
+  displayTruncateBtn?: boolean,
+  displayVisitBtn?: boolean,
 }
+
 const Profile: React.FC<profileProps> = ({
-  wrappedlink = "",
-  profileImg,
-  profileName,
+  profileName = "",
   editBtnDisplay,
   editBtnOnclick,
-  about,
-  truncateBtnOnClick,
-  truncateBtnTxt,
+  displayTruncateBtn = true,
+  displayVisitBtn = true,
 }) => {
+  type UserData = {
+    about: string;
+    created_at: string;
+    email: string;
+    name: string;
+    img: string;
+    id: string;
+  }
+  const [userData, setUserData] = useState<UserData>();
+  const [maxAbout, setMaxAbout] = useState(100);
+  const [truncateBtnTxt, settruncateBtnTxt] = useState("show more");
+  useEffect(() => {
+    async function GetUserData() {
+      const req = await axios.get(`/api/user?name=${profileName}`);
+      if (req.status == 200) {
+        console.log({ userData: req.data.data[0] });
+        setUserData(req.data.data[0]);
+      };
+    }; GetUserData();
+  }, [profileName])
 
+  function handleTruncate() {
+    if (maxAbout == 100) {
+      setMaxAbout(1000);
+      settruncateBtnTxt("show less");
+    }
+    else {
+      setMaxAbout(100);
+      settruncateBtnTxt("show more")
+    }
+  }
   return (
     <div className={styles.pfpWraper}>
       <section className={styles.imgWraper}>
-        <img src={profileImg || "/icons/pfp.svg"} alt={profileImg} className={styles.pfpImg} />
+        <img src={userData?.img || "/icons/pfp.svg"} alt={userData?.img} className={styles.pfpImg} />
       </section>
       <section className={styles.txtWraper}>
         <div className={styles.headingAndlogo}>
-          <h1>{profileName || "Loading..."}</h1>
-          <button className={styles.editBtn} style={{ display: editBtnDisplay }} onClick={editBtnOnclick}>
+          <h1>{userData?.name || "Loading..."}</h1>
+          <button className={styles.editBtn} style={{ display: editBtnDisplay == true ? "" : "none" }} onClick={editBtnOnclick}>
             <img src="/icons/edit.svg" alt="" />
           </button>
         </div>
         <p>
-          {about}
-          <button className={styles.readMore} onClick={truncateBtnOnClick}>{truncateBtnTxt}</button>
+          {truncateTxt(`${userData?.about || ""}`, maxAbout, "")}...
+          <button
+            className={styles.readMore}
+            onClick={handleTruncate} style={{ display: displayTruncateBtn ? "" : "none" }}>{truncateBtnTxt}</button>
         </p>
-        <div className={styles.btnArea}>
-          <Btn text="visit" />
+        <div className={styles.btnArea} style={{ display: displayVisitBtn ? "" : "none" }}>
+          <Link href={`/user/profile/${userData?.name}`}><Btn text="visit" /></Link>
         </div>
       </section>
     </div>
