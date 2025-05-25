@@ -33,7 +33,7 @@ export default function Home() {
 
   const handleCreateAccount = async (e: React.FormEvent) => {
     e.preventDefault();
-    let loading = toast.loading("Creating account...");
+    const loading = toast.loading("Creating account...");
     const loginData = {
       name: formData.name,
       password: formData.password
@@ -75,7 +75,7 @@ export default function Home() {
   };
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    let loading = toast.loading("Login...");
+    const loading = toast.loading("Login...");
     try {
       const data = await axios.post("/api/login", formData);
       const response = await data.data;

@@ -20,7 +20,7 @@ const CreatePost = () => {
   });
   // make the Post Btn disbale untill form is valid
   useEffect(() => {
-    formData && formData.title.length > 0 && formData.description.length > 0 ? setDisableBtn(false) : setDisableBtn(true);
+    setDisableBtn(!(formData.title.length > 0 && formData.description.length > 0));
   }, [formData]);
 
 

@@ -6,7 +6,7 @@ import { useUserStore } from "../../../store/zestStore/Store";
 
 const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");
-  const { name, profile, id } = useUserStore();
+  const { name, profile } = useUserStore();
 
   return (
     <nav className={styles.nav}>

@@ -1,5 +1,4 @@
 // app/user/blogs/[id]/page.tsx
-import { Metadata } from "next";
 import Blogs from "./Blogs";
 
 export async function generateMetadata() {
