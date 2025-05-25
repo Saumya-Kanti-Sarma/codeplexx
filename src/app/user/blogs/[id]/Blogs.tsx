@@ -10,12 +10,9 @@ import { truncateTxt } from "@/hooks/Truncate";
 import Profile from "@/components/Profile/Profile";
 import AllPosts from "@/components/AllPosts/AllPosts";
 import Loader from "@/components/Loaders/Loader";
+import { useParams } from "next/navigation";
 
-interface BlogProps {
-  id?: string
-}
-
-const Blogs: React.FC<BlogProps> = ({ id }) => {
+const Blogs = () => {
   type blog = {
     user_id: string;
     title: string;
@@ -27,11 +24,11 @@ const Blogs: React.FC<BlogProps> = ({ id }) => {
   };
 
   const [rawData, setData] = useState<blog[]>([]);
-
+  const params = useParams<{ id: string }>();
 
   useEffect(() => {
     async function GetData() {
-      const req = await axios.get(`/api/blogs/one?id=${id}`);
+      const req = await axios.get(`/api/blogs/one?id=${params.id}`);
       if (req.status == 200) {
         //console.log(req.data);
         setData(req.data.data);
@@ -44,38 +41,38 @@ const Blogs: React.FC<BlogProps> = ({ id }) => {
         )
       }
     }; GetData();
-  }, [id, rawData[0]?.user_id]);
+  }, [params.id, rawData[0]?.user_id]);
 
   return (
     <>
       {rawData && rawData.length > 0 ? rawData.map((item, index) =>
-        <>
+        <React.Fragment key={index}>
           <div className={styles.blogContainer} key={index}>
             <article className={styles.blogContent}>
-              <h1 className={styles.title}>{rawData[0]?.title}</h1>
+              <h1 className={styles.title}>{item?.title}</h1>
               <p></p>
               <div className={styles.blogImgholder}>
-                <img src={rawData[0]?.image_url || "/def/def-img.jpeg"} alt="blogImg" className={styles.blogImg} />
-                <p>posted: {truncateTxt(`${rawData[0]?.created_at}`, 10, "")}</p>
+                <img src={item?.image_url || "/def/def-img.jpeg"} alt="blogImg" className={styles.blogImg} />
+                <p>posted: {truncateTxt(`${item?.created_at}`, 10, "")}</p>
               </div>
               <hr />
               <div className="markdown">
 
                 <ReactMarkdown rehypePlugins={[rehypeHighlight]} remarkPlugins={[remarkGfm]}>
-                  {rawData[0]?.content}
+                  {item?.content}
                 </ReactMarkdown>
               </div>
 
             </article>
             <br />
-            {rawData ? <>
+            {item ? <>
               <h2>Follow Me: </h2>
               <br />
               <Profile
                 displayTruncateBtn={false}
                 displayVisitBtn={true}
                 editBtnDisplay={false}
-                profileName={`${rawData[0]?.uploaded_by}`}
+                profileName={`${item?.uploaded_by}`}
               />
             </> :
               <>
@@ -89,7 +86,7 @@ const Blogs: React.FC<BlogProps> = ({ id }) => {
             <br />
             <div className="lastDiv"></div>
           </div>
-        </>
+        </React.Fragment>
       ) : <>
         <div className={styles.loader}>
           <Loader />

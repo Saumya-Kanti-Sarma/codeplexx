@@ -1,19 +1,16 @@
 import { Metadata } from "next";
 import ProfilePage from "./ProfilePage";
-export async function generateMetadata({ params }: { params: { name: string } }): Promise<Metadata> {
-  const req = await fetch(`${process.env.URL}/api/user?name=${params.name}`);
-  const res = await req.json();
-  console.log(res);
+
+
+export async function generateMetadata() {
+
   return {
-    title: `Profile of ${res.data[0]?.name}` || "Name",
-    description: `${res.data[0]?.about}` || "user description",
+    title: "Profile",
+    description: "Profile section of c plexx",
   };
 }
 
 
-
-export default function page({ params }: { params: { name: string } }) {
-  return (
-    <ProfilePage name={params.name} />
-  );
+export default function Page() {
+  return <ProfilePage />
 }

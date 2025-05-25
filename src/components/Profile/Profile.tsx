@@ -73,7 +73,7 @@ const Profile: React.FC<profileProps> = ({
             onClick={handleTruncate} style={{ display: displayTruncateBtn ? "" : "none" }}>{truncateBtnTxt}</button>
         </p>
         <div className={styles.btnArea} style={{ display: displayVisitBtn ? "" : "none" }}>
-          <Link href={`/user/profile/${userData?.name}`}><Btn text="visit" /></Link>
+          <Link href={`/user/profile/${userData?.name}`} className={styles.visit}><Btn text="visit" /></Link>
         </div>
       </section>
     </div>

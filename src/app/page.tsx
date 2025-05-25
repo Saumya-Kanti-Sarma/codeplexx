@@ -8,6 +8,7 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "../../store/zestStore/Store";
 import axios from "axios";
+import Link from "next/link";
 
 export default function Home() {
   const [isLogin, setIsLogin] = useState(false);
@@ -180,6 +181,7 @@ export default function Home() {
                 setIsLogin(!isLogin);
               }}
             />
+            <Link href={"/user/home"} className={styles.skip}>Skip for now</Link>
           </div>
         </form>
       </div>

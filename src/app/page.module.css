@@ -53,6 +53,22 @@
   width: 100%;
 }
 
+.skip {
+  text-align: center;
+  width: 100%;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--dark-green);
+  text-decoration: none;
+  opacity: 0.5;
+  transition: 0.22s ease-in-out;
+}
+
+.skip:hover {
+  opacity: 1;
+  transform: scale(1.03);
+}
+
 @media (max-width:780px) {
   .main {
     flex-direction: column;

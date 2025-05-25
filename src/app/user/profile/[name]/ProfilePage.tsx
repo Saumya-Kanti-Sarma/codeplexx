@@ -8,12 +8,12 @@ import AllPosts from "@/components/AllPosts/AllPosts";
 import { useUserStore } from "../../../../../store/zestStore/Store";
 import axios from "axios";
 import Loader from "@/components/Loaders/Loader";
+import { useParams } from "next/navigation";
 
-interface profileProps {
-  name?: string,
-}
-const ProfilePage: React.FC<profileProps> = ({ name }) => {
+
+const ProfilePage = () => {
   const { id } = useUserStore();
+  const { name } = useParams();
   const [postDisplay, setPostDisplay] = useState(true);
   const [userId, setUserId] = useState("");
   useEffect(() => {
@@ -47,7 +47,7 @@ const ProfilePage: React.FC<profileProps> = ({ name }) => {
         <div className={styles.contentArea} >
           <div style={{ display: `${postDisplay == true ? "" : "none"}` }} className={styles.allPosts} >
             {
-              userId.length < 0 ? <>
+              userId && userId.length < 0 ? <>
                 <div className={styles.miniLoader}>
                   <Loader />
                 </div>

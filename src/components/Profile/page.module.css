@@ -94,6 +94,10 @@
   width: 100%;
 }
 
+.visit {
+  text-decoration: none;
+}
+
 @media (max-width: 690px) {
   .pfpWraper {
     height: 140px;

@@ -1,17 +1,18 @@
-// app/users/blogs/[id]/page.tsx
+// app/user/blogs/[id]/page.tsx
 import { Metadata } from "next";
 import Blogs from "./Blogs";
 
-export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
-  const res = await fetch(`${process.env.URL}/api/blogs/one?id=${params.id}`);
-  const blog = await res.json();
-  const data = blog.data[0];
+export async function generateMetadata() {
+
+
   return {
-    title: data?.title || "Blog",
-    description: data?.content?.slice(0, 160) || "Blog description",
+    title: "Blogs",
+    description: "this is the blogs section of c plexx",
   };
 }
 
-export default function Page({ params }: { params: { id: string } }) {
-  return <Blogs id={params.id} />;
+
+
+export default function Page() {
+  return <Blogs />;
 }
