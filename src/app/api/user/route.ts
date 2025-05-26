@@ -83,7 +83,7 @@ export async function PUT(req: NextRequest) {
     };
     return NextResponse.json({
       status: 200,
-      message: `updating data successful`,
+      message: `data upated successfully`,
       data: data
     })
   };

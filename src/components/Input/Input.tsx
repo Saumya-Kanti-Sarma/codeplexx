@@ -12,7 +12,7 @@ interface InpProps {
   inpTextAlign?: React.CSSProperties['textAlign'];
   inpOnChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   inpValue?: string | number | readonly string[],
-  required?: boolean
+  required?: boolean,
 }
 
 const Input: React.FC<InpProps> = ({

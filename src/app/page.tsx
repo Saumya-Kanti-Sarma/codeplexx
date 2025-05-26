@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { useUserStore } from "../../store/zestStore/Store";
 import axios from "axios";
 import Link from "next/link";
+import { hash } from "./libs/hashPasswords";
 
 export default function Home() {
   const [isLogin, setIsLogin] = useState(false);
@@ -29,44 +30,50 @@ export default function Home() {
       ...prev,
       [id]: newValue.trim(),
     }));
+    // console.log(formData);
+
   };
 
   const handleCreateAccount = async (e: React.FormEvent) => {
     e.preventDefault();
     const loading = toast.loading("Creating account...");
+    const hashPassword = hash(formData.password);
     const loginData = {
       name: formData.name,
-      password: formData.password
+      password: hashPassword,
+      email: formData.email
     }
     try {
       const data = await axios.post("/api/user", loginData);
-      console.log(data.data);
+      const status = data.status
+      const response = data.data.data[0];
 
-      if (data.data.status == 200) {
-        Cookies.set("userLoginCredential", `${data.data.data.created_at}${Date.now()}${data.data.data.id}`)
+      if (status == 200) {
+        Cookies.set("userLoginCredential", `${response.created_at}${Date.now()}${response.id}`)
         Cookies.set("user_UUID", data.data.data.id);
-        const cookieFields = ["name", "email", "img", "about", "id"];
-        cookieFields.forEach(field => {
-          Cookies.set(field, data.data.data[field]);
-        });
+        Cookies.set("id", response.id);
+        Cookies.set("name", response.name);
+        Cookies.set("email", response.email);
+        Cookies.set("about", response.id);
+        Cookies.set("img", response.img);
         setUser({
-          id: data.data.data.id,
-          name: data.data.data.name,
-          email: data.data.data.email,
-          profile: data.data.data.img,
-          about: data.data.data.about,
+          id: response.id,
+          name: response.name,
+          email: response.email,
+          profile: response.img,
+          about: response.about,
         });
-        toast.success(data.data.message);
+        toast.success(response.message);
         toast.dismiss(loading);
         toast("redirecting.. please wait");
         router.push("/user/home")
       }
-      if (data.data.error.code == "23505") {
+      if (response.error.code == "23505") {
         toast.error("Account already exist. please try login")
       }
     } catch (error) {
       toast.error("cannot create account, please try again later");
-      console.log(error);
+      console.error(error);
     }
     finally {
       toast.dismiss(loading);
@@ -79,7 +86,7 @@ export default function Home() {
     try {
       const data = await axios.post("/api/login", formData);
       const response = await data.data;
-      console.log(response);
+      // console.log(response);
 
       if (response.status == 200) {
         Cookies.set("userLoginCredential", `${response.data.created_at}${Date.now()}${response.data.id}`)
@@ -107,10 +114,10 @@ export default function Home() {
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         toast.error(error.response.data.message);
-        console.log(error);
+        console.error(error);
       } else {
         toast.error("An unexpected error occurred.");
-        console.log(error);
+        console.error(error);
       }
     }
     finally {

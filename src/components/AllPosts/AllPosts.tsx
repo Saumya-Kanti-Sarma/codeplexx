@@ -2,8 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import BlogPost from '../BlogPost/BlogPost';
-import Loader from '../Loaders/Loader';
-
+import styles from "./page.module.css";
 interface PostParams {
   url?: string,
 }
@@ -34,16 +33,19 @@ const AllPosts: React.FC<PostParams> = ({ url }) => {
   }, [url]);
 
   if (loading) return (
-    <div style={{
-      width: "200px",
-      height: "200px",
-      margin: "0 auto",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center"
-    }}>
-      <Loader />
-    </div>
+    <>
+      {[1, 3, 3].map((_, index) => (
+        <div className={styles.wraper} key={index}>
+          <section className={styles.imgSection}>
+            <img src={"/def/def-img.jpeg"} alt={"def-img.jpeg"} />
+          </section>
+          <section className={styles.textSection}>
+            <div></div>
+            <div></div>
+          </section>
+        </div>
+      ))}
+    </>
   );
   if (data && data.length == 0) {
     return (
@@ -52,6 +54,7 @@ const AllPosts: React.FC<PostParams> = ({ url }) => {
       </>
     )
   }
+
   return (
     <>
       {data && data.map((item, index) => (
