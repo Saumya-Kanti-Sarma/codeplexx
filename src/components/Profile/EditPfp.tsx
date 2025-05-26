@@ -22,7 +22,7 @@ const EditPfp: React.FC<editProps> = ({ display = true, closeBtn }) => {
     img: profile,
     id: id
   });
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
 
     if (type === "file") {
