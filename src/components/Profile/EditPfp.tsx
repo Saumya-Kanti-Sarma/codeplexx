@@ -45,11 +45,11 @@ const EditPfp: React.FC<editProps> = ({ display = true, closeBtn }) => {
     console.log(imgName);
 
     if (file && profile == "/icons/pfp.svg") {
-      const { data, error } = await supabase.storage
+      const supabaseStorage = await supabase.storage
         .from("cplexx")
         .upload(`profile/${imgName}`, file)
-      if (error) {
-        toast.error(error.message);
+      if (supabaseStorage.error) {
+        toast.error(supabaseStorage.error.message);
       };
       const path = supabase.storage.from("cplexx").getPublicUrl(`profile/${imgName}`);
       console.log(path);
@@ -58,11 +58,11 @@ const EditPfp: React.FC<editProps> = ({ display = true, closeBtn }) => {
     };
     // delete the existing image
     if (file && profile.includes('https://azjgnoxfyygbnquzecyw.supabase.co/storage/v1/object/public/cplexx/profile/')) {
-      const { data, error } = await supabase.storage
+      const supabaseStorage = await supabase.storage
         .from("cplexx")
         .update(`profile/${profile.split("").splice(81).join("")}`, file)
-      if (error) {
-        toast.error(error.message);
+      if (supabaseStorage.error) {
+        toast.error(supabaseStorage.error.message);
       } else {
         const path = supabase.storage.from("cplexx").getPublicUrl(`profile/${imgName}`);
         console.log(path.data.publicUrl);
@@ -128,13 +128,3 @@ const EditPfp: React.FC<editProps> = ({ display = true, closeBtn }) => {
 }
 
 export default EditPfp
-
-{/* 
-        
-        <div className={styles.inputArea}>
-          <div className={styles.inputFields}>
-            <input type="text" placeholder="edit name" value={name} className={styles.nameInp} />
-            <textarea placeholder="edit name" value={about} className={styles.aboutInp} />
-          </div>
-          <Btn text={"submit"} />
-        </div> */}
