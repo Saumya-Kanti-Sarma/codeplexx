@@ -7,6 +7,7 @@ import { truncateTxt } from '@/hooks/Truncate';
 import Link from 'next/link';
 import { useUserStore } from '../../../store/zestStore/Store';
 import EditPfp from './EditPfp';
+import { useParams } from 'next/navigation';
 
 interface profileProps {
   profileName?: string,
@@ -31,13 +32,14 @@ const Profile: React.FC<profileProps> = ({
     id: string;
   }
   const { name, about, profile } = useUserStore();
+  const params = useParams();
   const [userData, setUserData] = useState<UserData>();
   const [maxAbout, setMaxAbout] = useState(100);
   const [displayEdit, setDisplayEdit] = useState(false);
   const [truncateBtnTxt, settruncateBtnTxt] = useState("show more");
   useEffect(() => {
     async function GetUserData() {
-      if (!name) {
+      if (name != profileName) {
         const req = await axios.get(`/api/user?name=${profileName}`);
         if (req.status == 200) {
           console.log({ userData: req.data.data[0] });
