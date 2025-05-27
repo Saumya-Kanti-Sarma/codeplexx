@@ -31,8 +31,7 @@ const Profile: React.FC<profileProps> = ({
     img: string;
     id: string;
   }
-  const { name, about, profile } = useUserStore();
-  const params = useParams();
+  const { name, about, profile } = useUserStore();// coming from store
   const [userData, setUserData] = useState<UserData>();
   const [maxAbout, setMaxAbout] = useState(100);
   const [displayEdit, setDisplayEdit] = useState(false);
@@ -45,8 +44,7 @@ const Profile: React.FC<profileProps> = ({
           console.log({ userData: req.data.data[0] });
           setUserData(req.data.data[0]);
         };
-      }
-      else {
+      } else {
         const data = {
           name: name,
           img: profile,
@@ -54,11 +52,11 @@ const Profile: React.FC<profileProps> = ({
           created_at: "",
           email: "",
           id: ""
-        }
+        };
         setUserData(data);
-      }
-    }; GetUserData();
-  }, [profileName])
+      };
+    }; GetUserData();;
+  }, [profileName, displayTruncateBtn])
 
   function handleTruncate() {
     if (maxAbout == 100) {
@@ -103,9 +101,12 @@ const Profile: React.FC<profileProps> = ({
           </div>
           <p>
             {truncateTxt(`${userData?.about || ""}`, maxAbout, "")}...
-            <button
-              className={styles.readMore}
-              onClick={handleTruncate} style={{ display: displayTruncateBtn ? "" : "none" }}>{truncateBtnTxt}</button>
+            {userData && userData?.about?.length > 50 ?
+              <button
+                className={styles.readMore}
+                onClick={handleTruncate} style={{ display: displayTruncateBtn ? "" : "none" }}>{truncateBtnTxt}
+              </button> : <></>
+            }
           </p>
           <div className={styles.btnArea} style={{ display: displayVisitBtn ? "" : "none" }}>
             <Link href={`/user/profile/${userData?.name}`} className={styles.visit}><Btn text="visit" /></Link>
