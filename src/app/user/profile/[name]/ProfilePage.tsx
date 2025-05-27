@@ -12,7 +12,7 @@ import { useParams } from "next/navigation";
 
 
 const ProfilePage = () => {
-  const { id } = useUserStore();
+  const Store = useUserStore();
   const { name } = useParams();
   const [postDisplay, setPostDisplay] = useState(true);
   const [userId, setUserId] = useState("");
@@ -33,10 +33,10 @@ const ProfilePage = () => {
           <Profile
             profileName={`${name}`}
             displayVisitBtn={false}
-            editBtnDisplay={id ? true : false}
+            editBtnDisplay={Store.name == name ? true : false}
           />
         </div>
-        {id ? <>
+        {Store.name == name ? <>
           <div className={styles.btnArea}>
             <Btn text="All posts" bgColor={`${postDisplay == true ? "--primary-green" : "--light-green"}`} onClick={() => { setPostDisplay(true) }} />
             <Btn text="Create" bgColor={`${postDisplay == true ? "--light-green" : "--primary-green"}`} onClick={() => { setPostDisplay(false) }} />
@@ -54,7 +54,7 @@ const ProfilePage = () => {
               </> : <AllPosts url={`/api/blogs/getAll?id=${userId}&from=0&to=12`} />
             }
           </div>
-          <div style={{ display: id ? "" : "none" }}>
+          <div style={{ display: Store.name == name ? "" : "none" }}>
             <div style={{ display: `${postDisplay == true ? "none" : ""}` }} className={styles.create}>
               <CreatePost />
             </div>

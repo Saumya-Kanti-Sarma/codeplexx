@@ -39,6 +39,7 @@ const Profile: React.FC<profileProps> = ({
   useEffect(() => {
     async function GetUserData() {
       if (name != profileName) {
+        displayEdit == false;
         const req = await axios.get(`/api/user?name=${profileName}`);
         if (req.status == 200) {
           console.log({ userData: req.data.data[0] });
@@ -56,6 +57,8 @@ const Profile: React.FC<profileProps> = ({
         setUserData(data);
       };
     }; GetUserData();;
+
+
   }, [profileName, displayTruncateBtn])
 
   function handleTruncate() {
