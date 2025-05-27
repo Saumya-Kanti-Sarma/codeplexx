@@ -6,8 +6,7 @@ import axios from 'axios';
 import { truncateTxt } from '@/hooks/Truncate';
 import Link from 'next/link';
 import { useUserStore } from '../../../store/zestStore/Store';
-import EditPfp from './EditPfp';
-import { useParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 interface profileProps {
   profileName?: string,
@@ -31,11 +30,12 @@ const Profile: React.FC<profileProps> = ({
     img: string;
     id: string;
   }
-  const { name, about, profile } = useUserStore();// coming from store
+  const { name, about, profile, id } = useUserStore();// coming from store
   const [userData, setUserData] = useState<UserData>();
   const [maxAbout, setMaxAbout] = useState(100);
   const [displayEdit, setDisplayEdit] = useState(false);
   const [truncateBtnTxt, settruncateBtnTxt] = useState("show more");
+  const router = useRouter();
   useEffect(() => {
     async function GetUserData() {
       if (name != profileName) {
@@ -85,8 +85,8 @@ const Profile: React.FC<profileProps> = ({
     )
   }
 
-  function handleCloseEdit() {
-    setDisplayEdit((prev) => prev == true ? false : true)
+  function handleEdit() {
+    router.push(`/user/profile/${name}/edit`)
   };
   return (
     <>
@@ -98,7 +98,7 @@ const Profile: React.FC<profileProps> = ({
         <section className={styles.txtWraper}>
           <div className={styles.headingAndlogo}>
             <h1>{userData?.name || "Loading..."}</h1>
-            <button className={styles.editBtn} style={{ display: editBtnDisplay == true ? "" : "none" }} onClick={handleCloseEdit}>
+            <button className={styles.editBtn} style={{ display: editBtnDisplay == true ? "" : "none" }} onClick={handleEdit}>
               <img src="/icons/edit.svg" alt="" />
             </button>
           </div>
@@ -116,7 +116,6 @@ const Profile: React.FC<profileProps> = ({
           </div>
         </section>
       </div>
-      <EditPfp display={displayEdit} closeBtn={handleCloseEdit} />
     </>
   )
 }

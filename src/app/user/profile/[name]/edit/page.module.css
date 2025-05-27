@@ -1,41 +1,14 @@
 .editmain {
-  position: absolute;
-  top: 70px;
   width: 100%;
   max-width: 1200px;
   left: 50%;
-  transform: translate(-50%, 0);
+  margin: 0 auto;
   height: calc(100dvh - 70px);
   z-index: 100;
   overflow: hidden;
   background-color: #fff;
 }
 
-.closeImgBtn {
-  background: transparent;
-  border: none;
-  padding: 0;
-}
-
-.closeimg {
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-}
-
-.closeBar {
-  display: flex;
-  justify-content: end;
-  align-items: center;
-  opacity: 0.5;
-  width: 100%;
-  max-width: 1200px;
-  cursor: pointer;
-}
-
-.closeBar:hover {
-  opacity: 1;
-}
 
 .editArea {
   height: calc(100dvh - 100px);
@@ -56,11 +29,9 @@
 }
 
 .editImage {
-  height: 200px;
-  width: 200px;
+  width: 100%;
   object-fit: cover;
   border-radius: 100%;
-  opacity: 0.8;
 }
 
 .editAdd {
@@ -83,7 +54,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #00000067;
+  background: transparent;
 }
 
 .imageArea p {

@@ -1,50 +1,42 @@
 "use client";
 import React, { useState } from "react";
-import { useUserStore } from "../../../store/zestStore/Store";
-import Btn from "../../app/utils/Btn/Btn";
-import styles from "./edit.module.css";
+import { useUserStore } from "../../../../../../store/zestStore/Store";
+import Btn from "@/app/utils/Btn/Btn";
+import styles from "./page.module.css";
 import { supabase } from "@/app/libs/suprabaseClient";
 import toast from "react-hot-toast";
 import axios from "axios";
 import Cookies from "js-cookie";
-import { useRouter } from "next/navigation";
-interface editProps {
-  display?: boolean,
-  closeBtn?: () => void
-}
-const EditPfp: React.FC<editProps> = ({ display = true, closeBtn }) => {
-  const { name, profile, about, id } = useUserStore();
-  const [newImg, setNewImg] = useState("");
+import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
+
+
+const EditPfp = () => {
   const router = useRouter();
-  const [formData, setFormData] = useState({
-    name: name,
-    about: about,
-    img: profile,
-    id: id
+  const store = useUserStore();
+  const { name } = useParams();
+  const [formData, setFormData] = useState({ // def values from store
+    name: store.name,
+    about: store.about,
+    img: store.profile,
+    id: store.id
   });
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-    const { name, value, type } = e.target;
-
-    if (type === "file") {
-      const files = (e.target as HTMLInputElement).files;
-      setFormData(prev => ({
-        ...prev,
-        [name]: files && files[0] ? files[0] : null
-      }));
-    }
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
       [name]: value
     }));
   };
   const handleSubmit = async () => {
-    setNewImg(formData.img);
+    let image = formData.img;
     // step1: upload the image to supabase(cplexx/profile)
     const file = (document.querySelector('input[type="file"]') as HTMLInputElement)?.files?.[0];
     const imgName = `${Date.now()}-${name}`;
     console.log(imgName);
 
-    if (file && profile == "/icons/pfp.svg") {
+    // if profile is default image then:
+    if (file && store.profile === "/icons/pfp.svg") {
       const supabaseStorage = await supabase.storage
         .from("cplexx")
         .upload(`profile/${imgName}`, file)
@@ -52,58 +44,55 @@ const EditPfp: React.FC<editProps> = ({ display = true, closeBtn }) => {
         toast.error(supabaseStorage.error.message);
       };
       const path = supabase.storage.from("cplexx").getPublicUrl(`profile/${imgName}`);
+      console.log("if profile is def image");
       console.log(path);
-
-      setNewImg(path.data.publicUrl);
+      image = path.data.publicUrl;
     };
-    // delete the existing image
-    if (file && profile.includes('https://azjgnoxfyygbnquzecyw.supabase.co/storage/v1/object/public/cplexx/profile/')) {
+    // if profile is not default image
+    if (file && store.profile.includes('https://azjgnoxfyygbnquzecyw.supabase.co/storage/v1/object/public/cplexx/profile/')) {
       const supabaseStorage = await supabase.storage
         .from("cplexx")
-        .update(`profile/${profile.split("").splice(81).join("")}`, file)
+        .update(`profile/${store.profile.split("").splice(81).join("")}`, file)
       if (supabaseStorage.error) {
         toast.error(supabaseStorage.error.message);
-      } else {
-        const path = supabase.storage.from("cplexx").getPublicUrl(`profile/${imgName}`);
-        console.log(path.data.publicUrl);
-        setNewImg(path.data.publicUrl);
       };
+      const path = supabase.storage.from("cplexx").getPublicUrl(`profile/${imgName}`);
+      console.log("if profile is not def image");
+      console.log(path.data.publicUrl);
+      image = path.data.publicUrl;
     }
     //  upload the formData to supabase table named users
     const res = await axios.put('/api/user', {
       about: formData.about,
-      img: newImg,
+      img: image,
       name: formData.name,
       id: formData.id
     });
-    console.log({
-      message: "dome",
-      res
-    });
+    console.log(res);
     if (res.status == 200) {
       toast.success(res.data.message);
       Cookies.set("name", formData.name)
       Cookies.set("about", formData.about)
-      Cookies.set("profile", newImg)
+      Cookies.set("img", image)
       router.push(`/user/profile/${formData.name}`)
-      // window.location.reload();
+      window.location.reload();
     }
 
   };
+  if (store && store.name != name) {
+    return (
+      <>
+        <h1>Authentication denied! <br /> <Link href="/user/home">Go back</Link></h1>
+      </>
+    )
+  }
   return (
     <>
-      <div className={styles.editmain} style={{ display: display == true ? "" : "none" }}>
-
-        <div className={styles.closeBar}>
-          <button className={styles.closeImgBtn} onClick={closeBtn}>
-            <img src="/icons/close.svg" alt="close" className={styles.closeImg} />
-          </button>
-        </div>
-
+      <div className={styles.editmain}>
         <div className={styles.editArea}>
 
           <div className={styles.imageArea}>
-            <img src={formData?.img || undefined} alt={name} className={styles.editImage} />
+            <img src={formData?.img} alt={store.name} className={styles.editImage} />
             <div className={styles.editAdd}>
               <p>+</p>
             </div>
@@ -113,7 +102,7 @@ const EditPfp: React.FC<editProps> = ({ display = true, closeBtn }) => {
           <div className={styles.inputArea}>
 
             <div className={styles.inputFields}>
-              <input type="text" name="name" placeholder="edit name" value={formData.name} className={styles.nameInp} onChange={handleChange} />
+              <input type="text" name="name" placeholder="edit name" value={formData.name.replace(/ /g, "_")} className={styles.nameInp} onChange={handleChange} />
               <h3>About:</h3>
               <textarea name="about" placeholder="edit name" value={formData.about} className={styles.aboutInp} onChange={handleChange} />
             </div>
