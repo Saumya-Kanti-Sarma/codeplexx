@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useUserStore } from "../../../store/zestStore/Store";
-import Btn from "../Btn/Btn";
+import Btn from "../../app/utils/Btn/Btn";
 import styles from "./edit.module.css";
 import { supabase } from "@/app/libs/suprabaseClient";
 import toast from "react-hot-toast";

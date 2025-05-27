@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import Input from "@/components/Input/Input";
-import Btn from "@/components/Btn/Btn";
+import Input from "@/app/utils/Input/Input";
+import Btn from "@/app/utils/Btn/Btn";
 import styles from "./page.module.css";
 import { toast } from "react-hot-toast";
 import Cookies from "js-cookie";
@@ -46,7 +46,7 @@ export default function Home() {
     try {
       const data = await axios.post("/api/user", loginData);
       const status = data.status
-      const response = data.data.data[0];
+      const response = data.data;
 
       if (status == 200) {
         Cookies.set("userLoginCredential", `${response.created_at}${Date.now()}${response.id}`)

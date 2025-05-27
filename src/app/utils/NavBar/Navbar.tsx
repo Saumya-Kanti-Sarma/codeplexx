@@ -2,7 +2,7 @@
 import Link from "next/link";
 import styles from "./page.module.css";
 import { useState } from "react";
-import { useUserStore } from "../../../store/zestStore/Store";
+import { useUserStore } from "../../../../store/zestStore/Store";
 
 const Navbar = () => {
   const [searchQuery, setSearchQuery] = useState("");

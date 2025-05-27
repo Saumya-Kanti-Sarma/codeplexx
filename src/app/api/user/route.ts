@@ -7,9 +7,8 @@ export async function POST(req: NextRequest) {
   const { name, email, password } = await req.json();
   if (!name || !email || !password) {
     return NextResponse.json({
-      status: 500,
       message: "All fields required"
-    });
+    }, { status: 500 });
   };
   const newPassword = hash(password)
 
@@ -19,16 +18,14 @@ export async function POST(req: NextRequest) {
     .select()
   if (error) {
     return NextResponse.json({
-      status: 500,
       message: "Cannot create account",
-      error: error
-    });
+      error
+    }, { status: 500 });
   };
   return NextResponse.json({
-    status: 200,
     message: `Welcome ${name}`,
-    data: data
-  })
+    data
+  }, { status: 200 })
 };
 
 // Get user
@@ -37,7 +34,6 @@ export async function GET(req: NextRequest) {
   const name = searchParams.get("name");
   if (!name) {
     return NextResponse.json({
-      status: 400,
       message: "No Id was found"
     }, { status: 400 })
   };
@@ -47,15 +43,13 @@ export async function GET(req: NextRequest) {
     .eq("name", name)
   if (error) {
     return NextResponse.json({
-      status: 500,
       message: "Cannot find account"
-    });
+    }, { status: 500 });
   };
   return NextResponse.json({
-    status: 200,
     message: `got account`,
-    data: data
-  })
+    data
+  }, { status: 200 })
 };
 
 //update user
@@ -63,9 +57,8 @@ export async function PUT(req: NextRequest) {
   const { name, about, password, id, email, img } = await req.json();
   if (!id) {
     return NextResponse.json({
-      status: 400,
       message: "No Id was found"
-    })
+    }, { status: 400 })
   };
   // logic to update name or about
   if (name || about || img) {
@@ -76,16 +69,14 @@ export async function PUT(req: NextRequest) {
       .select()
     if (error) {
       return NextResponse.json({
-        status: 500,
         message: "Cannot update data",
         error: error
-      });
+      }, { status: 500 });
     };
     return NextResponse.json({
-      status: 200,
       message: `data upated successfully`,
-      data: data
-    })
+      data
+    }, { status: 200 })
   };
   // logic to update password
   if (password) {
@@ -98,9 +89,8 @@ export async function PUT(req: NextRequest) {
       .select();
     if (error) {
       return NextResponse.json({
-        status: 500,
         message: "Invalid credentials, failed to change password"
-      });
+      }, { status: 500 });
     }
     if (data.length === 0) {
       return NextResponse.json({
@@ -109,9 +99,8 @@ export async function PUT(req: NextRequest) {
       });
     }
     return NextResponse.json({
-      status: 200,
       message: "Password updated",
-      data: data
-    });
+      data
+    }, { status: 200 });
   }
 }

@@ -9,7 +9,7 @@ import axios from "axios";
 import { truncateTxt } from "@/hooks/Truncate";
 import Profile from "@/components/Profile/Profile";
 import AllPosts from "@/components/AllPosts/AllPosts";
-import Loader from "@/components/Loaders/Loader";
+import Loader from "@/app/utils/Loaders/Loader";
 import { useParams } from "next/navigation";
 
 const Blogs = () => {

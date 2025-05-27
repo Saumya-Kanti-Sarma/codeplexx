@@ -1,7 +1,7 @@
 "use Client";
 
 import type { Metadata } from "next";
-import Navbar from "@/components/NavBar/Navbar";
+import Navbar from "@/app/utils/NavBar/Navbar";
 
 export const metadata: Metadata = {
   title: "CPLEXX | Blog post for developers from all across the world",
