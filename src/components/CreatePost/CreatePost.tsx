@@ -8,7 +8,7 @@ import { supabase } from "@/app/libs/suprabaseClient";
 import toast from "react-hot-toast";
 
 const CreatePost = () => {
-  const { name, id } = useUserStore();
+  const store = useUserStore();
   const [disableBtn, setDisableBtn] = useState(true);
   const [btnLoader, setBtnLoader] = useState(false);
   const [btnText, setBtnText] = useState("Upload");
@@ -52,11 +52,12 @@ const CreatePost = () => {
     const fileName = Date.now();
     const loading = toast.loading("Uploading...")
     let updatedForm = {
-      user_id: id,
+      user_id: store.id,
       title: formData.title,
       content: formData.description,
       tags: formData.tags.split(","),
       image_url: "",
+      uploaded_by: store.name
     };
     //upload file
     if (formData.image) {
@@ -73,7 +74,8 @@ const CreatePost = () => {
       };
       const path = supabase.storage.from('cplexx').getPublicUrl(`blogs/${fileName}-${name}`);
       updatedForm = {
-        user_id: id,
+        user_id: store.id,
+        uploaded_by: store.name,
         title: formData.title,
         content: formData.description,
         tags: formData.tags.split(","),
