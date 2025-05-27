@@ -28,18 +28,15 @@ const BlogPost: React.FC<BlogProps> = ({
           <img src={img || "/def/def-img.jpeg"} alt={img} />
         </section>
         <section className={styles.textSection}>
-          <div className={styles.category}>{
-            <p>
-              {category?.join(" • ")}
-            </p>
-          }
+          <div>
+            <h1 className={styles.h1}>{truncateTxt(title, 70, "...")}</h1>
+            <br />
+            <section className={styles.about}>
+              <Markdown>
+                {`${truncateTxt(about, window.innerWidth < 600 ? 100 : 200, "...")}`}
+              </Markdown>
+            </section>
           </div>
-          <h1 className={styles.h1}>{truncateTxt(title, 70, "...")}</h1>
-          <section className={styles.about}>
-            <Markdown>
-              {`${truncateTxt(about, window.innerWidth < 600 ? 100 : 200, "...")}`}
-            </Markdown>
-          </section>
           <p className={styles.author}>{truncateTxt(date, 16, "")}</p>
         </section>
       </div>
