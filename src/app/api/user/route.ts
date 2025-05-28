@@ -16,16 +16,24 @@ export async function POST(req: NextRequest) {
     .from("users")
     .insert([{ name, email, password: newPassword }])
     .select()
-  if (error) {
+
+  if (data) {
     return NextResponse.json({
-      message: "Cannot create account",
+      message: `Welcome ${name}`,
+      data
+    }, { status: 200 })
+  };
+
+  if (error && error.code === "23505") {
+    return NextResponse.json({
+      message: "Account Already Exist",
       error
     }, { status: 500 });
   };
   return NextResponse.json({
-    message: `Welcome ${name}`,
-    data
-  }, { status: 200 })
+    message: "Cannot create account!, please try later",
+    error
+  }, { status: 500 });
 };
 
 // Get user
