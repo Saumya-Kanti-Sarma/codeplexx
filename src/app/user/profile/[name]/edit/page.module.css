@@ -1,4 +1,5 @@
-.editmain {
+.editmain,
+.skeletonEditmain {
   width: 100%;
   max-width: 1200px;
   left: 50%;
@@ -9,6 +10,31 @@
   background-color: #fff;
 }
 
+.skeletonEditmain {
+  animation: opacityAnimation infinite 1.2s;
+}
+
+@keyframes opacityAnimation {
+  0% {
+    opacity: 1;
+  }
+
+  25% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+
+  75% {
+    opacity: 0.7;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
 
 .editArea {
   height: calc(100dvh - 100px);
@@ -63,7 +89,9 @@
   font-size: 70px;
 }
 
-.inputArea {
+.inputArea,
+.skeletonInputArea {
+  padding: 0 10px;
   display: flex;
   height: calc(100% - 200px);
   flex-direction: column;
@@ -71,12 +99,28 @@
   align-items: center;
 }
 
-.inputFields {
+.skeletonInputArea {
+  justify-content: start;
+}
+
+.inputFields,
+.skeletonInputFields {
   display: flex;
   flex-direction: column;
   gap: 10px;
   justify-content: start;
   width: 100%;
+}
+
+.skeletonInputFields {
+  height: 50px;
+  margin-bottom: 10px;
+  background-color: #ececec;
+  border-radius: 12px;
+}
+
+.skeletonInputFields:last-child {
+  height: 45dvh;
 }
 
 .nameInp,

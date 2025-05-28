@@ -50,9 +50,13 @@ const EditPfp = () => {
     };
     // if profile is not default image
     if (file && store.profile.includes('https://azjgnoxfyygbnquzecyw.supabase.co/storage/v1/object/public/cplexx/profile/')) {
+      await supabase.storage
+        .from("cplexx")
+        .remove([`profile/${store.profile.split("").splice(81).join("")}`])
+
       const supabaseStorage = await supabase.storage
         .from("cplexx")
-        .update(`profile/${store.profile.split("").splice(81).join("")}`, file)
+        .upload(`profile/${imgName}`, file)
       if (supabaseStorage.error) {
         toast.error(supabaseStorage.error.message);
       };
@@ -79,13 +83,30 @@ const EditPfp = () => {
     }
 
   };
-  if (store && store.name != name) {
+  if (formData.name == "" && formData.about == "" && formData.img == "") {
+    if (store && store.name != name) {
+      return (
+        <>
+          <h1>Authentication denied! <br /> <Link href="/user/home">Go back</Link></h1>
+        </>
+      )
+    };
     return (
       <>
-        <h1>Authentication denied! <br /> <Link href="/user/home">Go back</Link></h1>
+        <div className={styles.editmain}>
+          <div className={styles.editArea}>
+            <div className={styles.imageArea}>
+              <img src={"/icons/pfp.svg"} alt={"loading..."} className={styles.editImage} />
+            </div>
+            <div className={styles.skeletonInputArea}>
+              <div className={styles.skeletonInputFields}></div>
+              <div className={styles.skeletonInputFields}></div>
+            </div>
+          </div>
+        </div>
       </>
     )
-  }
+  };
   return (
     <>
       <div className={styles.editmain}>
@@ -117,3 +138,9 @@ const EditPfp = () => {
 }
 
 export default EditPfp
+
+//old profile url: https://azjgnoxfyygbnquzecyw.supabase.co/storage/v1/object/public/cplexx/profile/1748344622697-quote
+
+// new profile url: https://azjgnoxfyygbnquzecyw.supabase.co/storage/v1/object/public/cplexx/profile/1748344743284-quote
+
+// wtf is this?: https://azjgnoxfyygbnquzecyw.supabase.co/storage/v1/object/public/cplexx/profile/1748411330230-quote_guy
