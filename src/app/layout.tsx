@@ -13,8 +13,8 @@ export default function RootLayout({
 }) {
   const setUser = useUserStore((state) => state.setUser);
   useEffect(() => {
-    const userUUID = Cookies.get("user_UUID");
-    if (userUUID) {
+    const userLoginCredential = Cookies.get("userLoginCredential");
+    if (userLoginCredential) {
       setUser({
         name: Cookies.get("name"),
         email: Cookies.get("email"),
