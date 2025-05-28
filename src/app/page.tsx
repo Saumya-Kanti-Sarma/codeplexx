@@ -7,9 +7,7 @@ import { toast } from "react-hot-toast";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "../../store/zestStore/Store";
-import axios from "axios";
 import Link from "next/link";
-import { hash } from "./libs/hashPasswords";
 import { useCreate } from "@/hooks/useApi/hooks";
 
 export default function Home() {
@@ -67,7 +65,7 @@ export default function Home() {
     e.preventDefault();
     const loading = toast.loading("Creating account...");
     const data = await useCreate(formData, "/api/user");
-    console.log("data", data);
+    // console.log("data", data);
     if (data.status == 200) {
       const response = data.data[0];
       setCookies_Store_And_Navigate(response, loading, data);
@@ -80,7 +78,7 @@ export default function Home() {
     e.preventDefault();
     const loading = toast.loading("Login...");
     const data = await useCreate(formData, "/api/login");
-    console.log("data", data);
+    // console.log("data", data);
     if (data.status == 200) {
       const response = data.data;
       setCookies_Store_And_Navigate(response, loading, data);
