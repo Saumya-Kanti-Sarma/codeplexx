@@ -7,7 +7,8 @@ export async function POST(req: NextRequest) {
   const { name, email, password } = await req.json();
   if (!name || !email || !password) {
     return NextResponse.json({
-      message: "All fields required"
+      message: "All fields required",
+      status: 500
     }, { status: 500 });
   };
   const newPassword = hash(password)
@@ -20,6 +21,7 @@ export async function POST(req: NextRequest) {
   if (data) {
     return NextResponse.json({
       message: `Welcome ${name}`,
+      status: 200,
       data
     }, { status: 200 })
   };
@@ -27,11 +29,13 @@ export async function POST(req: NextRequest) {
   if (error && error.code === "23505") {
     return NextResponse.json({
       message: "Account Already Exist",
+      status: 500,
       error
     }, { status: 500 });
   };
   return NextResponse.json({
     message: "Cannot create account!, please try later",
+    status: 500,
     error
   }, { status: 500 });
 };
@@ -42,7 +46,8 @@ export async function GET(req: NextRequest) {
   const name = searchParams.get("name");
   if (!name) {
     return NextResponse.json({
-      message: "No Id was found"
+      message: "No Id was found",
+      status: 400
     }, { status: 400 })
   };
   const { data, error } = await supabase
@@ -51,11 +56,13 @@ export async function GET(req: NextRequest) {
     .eq("name", name)
   if (error) {
     return NextResponse.json({
-      message: "Cannot find account"
+      message: "Cannot find account",
+      status: 500,
     }, { status: 500 });
   };
   return NextResponse.json({
     message: `got account`,
+    status: 200,
     data
   }, { status: 200 })
 };
@@ -65,7 +72,8 @@ export async function PUT(req: NextRequest) {
   const { name, about, password, id, email, img } = await req.json();
   if (!id) {
     return NextResponse.json({
-      message: "No Id was found"
+      message: "No Id was found",
+      status: 400,
     }, { status: 400 })
   };
   // logic to update name or about
@@ -78,11 +86,13 @@ export async function PUT(req: NextRequest) {
     if (error) {
       return NextResponse.json({
         message: "Cannot update data",
+        status: 500,
         error: error
       }, { status: 500 });
     };
     return NextResponse.json({
       message: `data upated successfully`,
+      status: 200,
       data
     }, { status: 200 })
   };
@@ -97,7 +107,8 @@ export async function PUT(req: NextRequest) {
       .select();
     if (error) {
       return NextResponse.json({
-        message: "Invalid credentials, failed to change password"
+        message: "Invalid credentials, failed to change password",
+        status: 500,
       }, { status: 500 });
     }
     if (data.length === 0) {
@@ -108,6 +119,7 @@ export async function PUT(req: NextRequest) {
     }
     return NextResponse.json({
       message: "Password updated",
+      status: 200,
       data
     }, { status: 200 });
   }

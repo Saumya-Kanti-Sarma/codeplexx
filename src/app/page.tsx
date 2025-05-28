@@ -10,6 +10,7 @@ import { useUserStore } from "../../store/zestStore/Store";
 import axios from "axios";
 import Link from "next/link";
 import { hash } from "./libs/hashPasswords";
+import { useCreate } from "@/hooks/useApi/hooks";
 
 export default function Home() {
   const [isLogin, setIsLogin] = useState(false);
@@ -34,95 +35,59 @@ export default function Home() {
 
   };
 
+  // function to set cookies
+  const setCookies_Store_And_Navigate = (response: {
+    id: string,
+    name: string,
+    email: string,
+    about: string,
+    img: string,
+    created_at: string,
+  }, loading: string, data: {} | any) => {
+    Cookies.set("userLoginCredential", `${response.created_at}${Date.now()}${response.id}`)
+    Cookies.set("id", response.id);
+    Cookies.set("name", response.name);
+    Cookies.set("email", response.email);
+    Cookies.set("about", response.about);
+    Cookies.set("img", response.img);
+    setUser({
+      id: response.id,
+      name: response.name,
+      email: response.email,
+      profile: response.img,
+      about: response.about,
+    });
+    toast.dismiss(loading);
+    setTimeout(() => {
+      toast.success(data.message);
+    }, 500);
+    router.push("/user/home")
+  };
   const handleCreateAccount = async (e: React.FormEvent) => {
     e.preventDefault();
     const loading = toast.loading("Creating account...");
-    const hashPassword = hash(formData.password);
-    const loginData = {
-      name: formData.name,
-      password: hashPassword,
-      email: formData.email
-    }
-    try {
-      const data = await axios.post("/api/user", loginData);
-      const status = data.status
-      const response = data.data;
-
-      if (status == 200) {
-        Cookies.set("userLoginCredential", `${response.created_at}${Date.now()}${response.id}`)
-        Cookies.set("user_UUID", data.data.data.id);
-        Cookies.set("id", response.id);
-        Cookies.set("name", response.name);
-        Cookies.set("email", response.email);
-        Cookies.set("about", response.id);
-        Cookies.set("img", response.img);
-        setUser({
-          id: response.id,
-          name: response.name,
-          email: response.email,
-          profile: response.img,
-          about: response.about,
-        });
-        toast.success(response.message);
-        toast.dismiss(loading);
-        toast("redirecting.. please wait");
-        router.push("/user/home")
-      }
-      if (response.error.code == "23505") {
-        toast.error("Account already exist. please try login")
-      }
-    } catch (error) {
-      toast.error("cannot create account, please try again later");
-      console.error(error);
-    }
-    finally {
-      toast.dismiss(loading);
-    }
-
+    const data = await useCreate(formData, "/api/user");
+    console.log("data", data);
+    if (data.status == 200) {
+      const response = data.data[0];
+      setCookies_Store_And_Navigate(response, loading, data);
+    } else {
+      toast.error(data.message)
+    };
+    toast.dismiss(loading);
   };
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     const loading = toast.loading("Login...");
-    try {
-      const data = await axios.post("/api/login", formData);
-      const response = await data.data;
-      // console.log(response);
-
-      if (response.status == 200) {
-        Cookies.set("userLoginCredential", `${response.data.created_at}${Date.now()}${response.data.id}`)
-        Cookies.set("user_UUID", response.data.id);
-        const cookieFields = ["name", "email", "img", "about", "id"];
-        cookieFields.forEach(field => {
-          Cookies.set(field, response.data[field]);
-        });
-        setUser({
-          id: response.data.id,
-          name: response.data.name,
-          email: response.data.email,
-          profile: response.data.img,
-          about: response.data.about,
-        });
-        toast.success(data.data.message);
-        toast.dismiss(loading);
-        toast("redirecting.. please wait");
-        router.push("/user/home")
-      };
-      if (data.data.status == 500) {
-        toast.error(response.data.message);
-        toast.dismiss(loading);
-      }
-    } catch (error) {
-      if (axios.isAxiosError(error) && error.response) {
-        toast.error(error.response.data.message);
-        console.error(error);
-      } else {
-        toast.error("An unexpected error occurred.");
-        console.error(error);
-      }
-    }
-    finally {
-      toast.dismiss(loading);
-    }
+    const data = await useCreate(formData, "/api/login");
+    console.log("data", data);
+    if (data.status == 200) {
+      const response = data.data;
+      setCookies_Store_And_Navigate(response, loading, data);
+    } else {
+      toast.error(data.message)
+    };
+    toast.dismiss(loading);
   };
 
   return (
