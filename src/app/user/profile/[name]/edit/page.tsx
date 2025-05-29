@@ -8,12 +8,16 @@ import Cookies from "js-cookie";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { usePicUpdate, usePicUpload, useUpdate } from "@/hooks/useApi/hooks";
+import { useToString } from "@/hooks/useToString/hook";
 
 const EditPfp = () => {
   const router = useRouter();
   const store = useUserStore();
   const { name } = useParams();
   const [loading, setLoading] = useState(true);
+  const [disableBtn, setDisableBtn] = useState(false);
+  const [btnTxt, setBtnTxt] = useState("Save changes");
+  const [tempImg, setTempImg] = useState("");
   const [formData, setFormData] = useState({
     name: "",
     about: "",
@@ -30,11 +34,29 @@ const EditPfp = () => {
         id: store.id
       });
       setLoading(false);
+    };
+    if (tempImg.length > 0) {
+      setFormData({
+        name: store.name,
+        about: store.about,
+        img: tempImg,
+        id: store.id
+      })
     }
-  }, [store]);
+  }, [store, tempImg]);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = async (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+    if (name === "file") {
+      const file = (document.querySelector('input[type="file"]') as HTMLInputElement)?.files?.[0];
+      if (file) {
+        const base64 = await useToString(file);
+        // console.log(base64);
+
+        setTempImg(base64); // now works correctly
+        return;
+      }
+    };
     setFormData(prev => ({
       ...prev,
       [name]: name === "name" ? value.replace(/ /g, "_").toLowerCase() : value
@@ -42,10 +64,12 @@ const EditPfp = () => {
   };
 
   const handleSubmit = async () => {
-    let imageNewURL = formData.img;
+    setBtnTxt("Saving changes");
+    setDisableBtn(true);
+    let imageNewURL = store.profile;
 
     const file = (document.querySelector('input[type="file"]') as HTMLInputElement)?.files?.[0];
-    //console.log(file);
+    console.log(file?.name);
 
     const imgName = `${Date.now()}-${file?.name}`;
 
@@ -58,7 +82,7 @@ const EditPfp = () => {
       const oldImgPath = `profile/${store.profile.split("").splice(81).join("")}`;
       //console.log(oldImgPath);
       imageNewURL = `${await usePicUpdate({ file, path: `/profile/${imgName}`, imgToDelete: oldImgPath })}`;
-      //console.log("new image path: ", imageNewURL);
+      console.log("new image path: ", imageNewURL);
 
     }
     const res = await useUpdate({
@@ -67,7 +91,7 @@ const EditPfp = () => {
       name: formData.name,
       id: formData.id
     }, "/api/user");
-    //console.log("final updates: ", res);
+    console.log("final updates: ", res);
 
     if (res.status === 200) {
       Cookies.set("name", res.data[0].name);
@@ -79,7 +103,9 @@ const EditPfp = () => {
         toast.success(res.message);
         // window.location.reload();
       }, 1200);
-    }
+    };
+    setBtnTxt("Save changes");
+    setDisableBtn(false)
   };
 
   if (loading) {
@@ -112,7 +138,7 @@ const EditPfp = () => {
         <div className={styles.imageArea}>
           <img src={formData?.img} alt={store.name} className={styles.editImage} />
           <div className={styles.editAdd}><p>+</p></div>
-          <input type="file" className={styles.editAdd} onChange={handleChange} />
+          <input type="file" name="file" className={styles.editAdd} onChange={handleChange} />
         </div>
 
         <div className={styles.inputArea}>
@@ -134,7 +160,7 @@ const EditPfp = () => {
               onChange={handleChange}
             />
           </div>
-          <Btn text={"submit"} onClick={handleSubmit} />
+          <Btn text={btnTxt} onClick={handleSubmit} displayLoader={disableBtn} isDisable={disableBtn} />
         </div>
       </div>
     </div>
