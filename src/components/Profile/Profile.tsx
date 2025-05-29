@@ -42,7 +42,7 @@ const Profile: React.FC<profileProps> = ({
         displayEdit == false;
         const req = await axios.get(`/api/user?name=${profileName}`);
         if (req.status == 200) {
-          console.log({ userData: req.data.data[0] });
+          //console.log({ userData: req.data.data[0] });
           setUserData(req.data.data[0]);
         };
       } else {

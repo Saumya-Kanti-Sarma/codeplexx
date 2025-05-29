@@ -21,7 +21,7 @@ const ProfilePage = () => {
       const req = await axios.get(`/api/user?name=${name}`);
       const res = await req.data.data;
       setUserId(res[0]?.id)
-      console.log(res);
+      //console.log(res);
 
     }; getUserID();
   }, [userId])
