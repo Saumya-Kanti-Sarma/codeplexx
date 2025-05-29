@@ -47,6 +47,8 @@ export const useUpdate = async (data: {
   email?: string,
   password?: string,
   about?: string,
+  img?: string,
+  id?: string,
 
   // blogs creating
   user_id?: string,

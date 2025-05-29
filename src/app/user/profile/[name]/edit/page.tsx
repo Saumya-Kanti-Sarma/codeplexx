@@ -1,146 +1,144 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useUserStore } from "../../../../../../store/zestStore/Store";
 import Btn from "@/app/utils/Btn/Btn";
 import styles from "./page.module.css";
-import { supabase } from "@/app/libs/suprabaseClient";
 import toast from "react-hot-toast";
-import axios from "axios";
 import Cookies from "js-cookie";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-
+import { usePicUpdate, usePicUpload, useUpdate } from "@/hooks/useApi/hooks";
 
 const EditPfp = () => {
   const router = useRouter();
   const store = useUserStore();
   const { name } = useParams();
-  const [formData, setFormData] = useState({ // def values from store
-    name: store.name,
-    about: store.about,
-    img: store.profile,
-    id: store.id
+  const [loading, setLoading] = useState(true);
+  const [formData, setFormData] = useState({
+    name: "",
+    about: "",
+    img: "",
+    id: ""
   });
+
+  useEffect(() => {
+    if (store?.name) {
+      setFormData({
+        name: store.name,
+        about: store.about,
+        img: store.profile,
+        id: store.id
+      });
+      setLoading(false);
+    }
+  }, [store]);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: value
+      [name]: name === "name" ? value.replace(/ /g, "_").toLowerCase() : value
     }));
   };
+
   const handleSubmit = async () => {
-    let image = formData.img;
-    // step1: upload the image to supabase(cplexx/profile)
+    let imageNewURL = formData.img;
+
     const file = (document.querySelector('input[type="file"]') as HTMLInputElement)?.files?.[0];
-    const imgName = `${Date.now()}-${name}`;
-    console.log(imgName);
+    //console.log(file);
 
-    // if profile is default image then:
+    const imgName = `${Date.now()}-${file?.name}`;
+
     if (file && store.profile === "/icons/pfp.svg") {
-      const supabaseStorage = await supabase.storage
-        .from("cplexx")
-        .upload(`profile/${imgName}`, file)
-      if (supabaseStorage.error) {
-        toast.error(supabaseStorage.error.message);
-      };
-      const path = supabase.storage.from("cplexx").getPublicUrl(`profile/${imgName}`);
-      console.log("if profile is def image");
-      console.log(path);
-      image = path.data.publicUrl;
-    };
-    // if profile is not default image
-    if (file && store.profile.includes('https://azjgnoxfyygbnquzecyw.supabase.co/storage/v1/object/public/cplexx/profile/')) {
-      await supabase.storage
-        .from("cplexx")
-        .remove([`profile/${store.profile.split("").splice(81).join("")}`])
+      imageNewURL = `${await usePicUpload({ file, path: `/profile/${imgName}` })}`;
+      //console.log("no prev img:", imageNewURL);
 
-      const supabaseStorage = await supabase.storage
-        .from("cplexx")
-        .upload(`profile/${imgName}`, file)
-      if (supabaseStorage.error) {
-        toast.error(supabaseStorage.error.message);
-      };
-      const path = supabase.storage.from("cplexx").getPublicUrl(`profile/${imgName}`);
-      console.log("if profile is not def image");
-      console.log(path.data.publicUrl);
-      image = path.data.publicUrl;
+    };
+    if (file && store.profile.includes('https://azjgnoxfyygbnquzecyw.supabase.co/storage/v1/object/public/cplexx/profile/')) {
+      const oldImgPath = `profile/${store.profile.split("").splice(81).join("")}`;
+      //console.log(oldImgPath);
+      imageNewURL = `${await usePicUpdate({ file, path: `/profile/${imgName}`, imgToDelete: oldImgPath })}`;
+      //console.log("new image path: ", imageNewURL);
+
     }
-    //  upload the formData to supabase table named users
-    const res = await axios.put('/api/user', {
+    const res = await useUpdate({
       about: formData.about,
-      img: image,
+      img: imageNewURL,
       name: formData.name,
       id: formData.id
-    });
-    console.log(res);
-    if (res.status == 200) {
-      toast.success(res.data.message);
-      Cookies.set("name", formData.name)
-      Cookies.set("about", formData.about)
-      Cookies.set("img", image)
-      router.push(`/user/profile/${formData.name}`)
-      window.location.reload();
-    }
+    }, "/api/user");
+    //console.log("final updates: ", res);
 
+    if (res.status === 200) {
+      Cookies.set("name", res.data[0].name);
+      Cookies.set("about", res.data[0].about);
+      Cookies.set("img", res.data[0].img);
+
+      setTimeout(() => {
+        router.push(`/user/profile/${formData.name}`);
+        toast.success(res.message);
+        // window.location.reload();
+      }, 1200);
+    }
   };
-  if (formData.name == "" && formData.about == "" && formData.img == "") {
-    if (store && store.name != name) {
-      return (
-        <>
-          <h1>Authentication denied! <br /> <Link href="/user/home">Go back</Link></h1>
-        </>
-      )
-    };
+
+  if (loading) {
     return (
-      <>
-        <div className={styles.editmain}>
-          <div className={styles.editArea}>
-            <div className={styles.imageArea}>
-              <img src={"/icons/pfp.svg"} alt={"loading..."} className={styles.editImage} />
-            </div>
-            <div className={styles.skeletonInputArea}>
-              <div className={styles.skeletonInputFields}></div>
-              <div className={styles.skeletonInputFields}></div>
-            </div>
-          </div>
-        </div>
-      </>
-    )
-  };
-  return (
-    <>
       <div className={styles.editmain}>
         <div className={styles.editArea}>
-
           <div className={styles.imageArea}>
-            <img src={formData?.img} alt={store.name} className={styles.editImage} />
-            <div className={styles.editAdd}>
-              <p>+</p>
-            </div>
-            <input type="file" className={styles.editAdd} onChange={handleChange} />
+            <img src={"/icons/pfp.svg"} alt={"loading..."} className={styles.editImage} />
           </div>
-
-          <div className={styles.inputArea}>
-
-            <div className={styles.inputFields}>
-              <input type="text" name="name" placeholder="edit name" value={formData.name.replace(/ /g, "_")} className={styles.nameInp} onChange={handleChange} />
-              <h3>About:</h3>
-              <textarea name="about" placeholder="edit name" value={formData.about} className={styles.aboutInp} onChange={handleChange} />
-            </div>
-
-            <Btn text={"submit"} onClick={handleSubmit} />
+          <div className={styles.skeletonInputArea}>
+            <div className={styles.skeletonInputFields}></div>
+            <div className={styles.skeletonInputFields}></div>
           </div>
-
         </div>
       </div>
-    </>
-  )
-}
+    );
+  }
 
-export default EditPfp
+  if (store && store.name !== name) {
+    return (
+      <h1>
+        Authentication denied! <br /> <Link href="/user/home">Go back</Link>
+      </h1>
+    );
+  }
 
-//old profile url: https://azjgnoxfyygbnquzecyw.supabase.co/storage/v1/object/public/cplexx/profile/1748344622697-quote
+  return (
+    <div className={styles.editmain}>
+      <div className={styles.editArea}>
+        <div className={styles.imageArea}>
+          <img src={formData?.img} alt={store.name} className={styles.editImage} />
+          <div className={styles.editAdd}><p>+</p></div>
+          <input type="file" className={styles.editAdd} onChange={handleChange} />
+        </div>
 
-// new profile url: https://azjgnoxfyygbnquzecyw.supabase.co/storage/v1/object/public/cplexx/profile/1748344743284-quote
+        <div className={styles.inputArea}>
+          <div className={styles.inputFields}>
+            <input
+              type="text"
+              name="name"
+              placeholder="edit name"
+              value={formData.name}
+              className={styles.nameInp}
+              onChange={handleChange}
+            />
+            <h3>About:</h3>
+            <textarea
+              name="about"
+              placeholder="Write about yourself..."
+              value={formData.about}
+              className={styles.aboutInp}
+              onChange={handleChange}
+            />
+          </div>
+          <Btn text={"submit"} onClick={handleSubmit} />
+        </div>
+      </div>
+    </div>
+  );
+};
 
-// wtf is this?: https://azjgnoxfyygbnquzecyw.supabase.co/storage/v1/object/public/cplexx/profile/1748411330230-quote_guy
+export default EditPfp;
