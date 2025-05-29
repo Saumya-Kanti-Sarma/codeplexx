@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import Btn from '../../app/utils/Btn/Btn';
 import styles from './page.module.css';
 import axios from 'axios';
-import { truncateTxt } from '@/hooks/Truncate';
+import { truncateTxt } from '@/hooks/truncate/Truncate';
 import Link from 'next/link';
 import { useUserStore } from '../../../store/zestStore/Store';
 import { useRouter } from 'next/navigation';

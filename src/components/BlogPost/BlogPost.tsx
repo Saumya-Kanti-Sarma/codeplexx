@@ -1,7 +1,7 @@
 "use client";
 
 import styles from "./page.module.css";
-import { truncateTxt } from "@/hooks/Truncate";
+import { truncateTxt } from "@/hooks/truncate/Truncate";
 import Link from "next/link";
 import Markdown from "react-markdown";
 

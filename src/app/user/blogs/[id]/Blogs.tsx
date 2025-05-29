@@ -6,7 +6,7 @@ import rehypeHighlight from "rehype-highlight";
 import remarkGfm from "remark-gfm";
 import "highlight.js/styles/github-dark.css";
 import axios from "axios";
-import { truncateTxt } from "@/hooks/Truncate";
+import { truncateTxt } from "@/hooks/truncate/Truncate";
 import Profile from "@/components/Profile/Profile";
 import AllPosts from "@/components/AllPosts/AllPosts";
 import Loader from "@/app/utils/Loaders/Loader";
