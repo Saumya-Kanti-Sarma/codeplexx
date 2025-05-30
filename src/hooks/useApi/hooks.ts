@@ -52,9 +52,10 @@ export const useUpdate = async (data: {
 
   // blogs creating
   user_id?: string,
+  content?: string,
   title?: string,
   image_url?: string,
-  tags?: [string],
+  tags?: string[],
   uploaded_by?: string,
 
 }, url: string) => {
