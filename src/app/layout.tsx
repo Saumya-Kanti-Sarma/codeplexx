@@ -23,7 +23,7 @@ export default function RootLayout({
         id: Cookies.get("id"),
       })
     };
-  }, [])
+  }, [setUser])
   return (
     <html >
       <head>

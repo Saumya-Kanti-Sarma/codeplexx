@@ -8,7 +8,7 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useUserStore } from "../../store/zestStore/Store";
 import Link from "next/link";
-import { useCreate } from "@/hooks/useApi/hooks";
+import { dataCreate } from "@/hooks/useApi/hooks";
 
 export default function Home() {
   const [isLogin, setIsLogin] = useState(false);
@@ -41,7 +41,7 @@ export default function Home() {
     about: string,
     img: string,
     created_at: string,
-  }, loading: string, data: {} | any) => {
+  }, loading: string, data: unknown) => {
     Cookies.set("userLoginCredential", `${response.created_at}${Date.now()}${response.id}`)
     Cookies.set("id", response.id);
     Cookies.set("name", response.name);
@@ -57,14 +57,14 @@ export default function Home() {
     });
     toast.dismiss(loading);
     setTimeout(() => {
-      toast.success(data.message);
+      toast.success((data as { message: string }).message);
     }, 500);
     router.push("/user/home")
   };
   const handleCreateAccount = async (e: React.FormEvent) => {
     e.preventDefault();
     const loading = toast.loading("Creating account...");
-    const data = await useCreate(formData, "/api/user");
+    const data = await dataCreate(formData, "/api/user");
     // console.log("data", data);
     if (data.status == 200) {
       const response = data.data[0];
@@ -77,7 +77,7 @@ export default function Home() {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     const loading = toast.loading("Login...");
-    const data = await useCreate(formData, "/api/login");
+    const data = await dataCreate(formData, "/api/login");
     // console.log("data", data);
     if (data.status == 200) {
       const response = data.data;

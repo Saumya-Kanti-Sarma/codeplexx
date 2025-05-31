@@ -1,4 +1,4 @@
-export function useToString(file: File): Promise<string> {
+export function fileToString(file: File): Promise<string> {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {

@@ -30,20 +30,18 @@ const Profile: React.FC<profileProps> = ({
     img: string;
     id: string;
   }
-  const { name, about, profile, id } = useUserStore();// coming from store
+  const { name, about, profile } = useUserStore();// coming from store
   const [userData, setUserData] = useState<UserData>();
   const [maxAbout, setMaxAbout] = useState(100);
-  const [displayEdit, setDisplayEdit] = useState(false);
   const [truncateBtnTxt, settruncateBtnTxt] = useState("show more");
   const router = useRouter();
   useEffect(() => {
     async function GetUserData() {
       if (name != profileName) {
-        displayEdit == false;
         const req = await axios.get(`/api/user?name=${profileName}`);
         if (req.status == 200) {
           //console.log({ userData: req.data.data[0] });
-          setUserData(req.data.data[0]);
+          setUserData(req.data?.data?.[0]);
         };
       } else {
         const data = {
@@ -93,7 +91,7 @@ const Profile: React.FC<profileProps> = ({
 
       <div className={styles.pfpWraper}>
         <section className={styles.imgWraper}>
-          <img src={userData?.img || "/icons/pfp.svg"} alt={userData?.img} className={styles.pfpImg} style={{}} />
+          <img src={userData?.img || "/icons/pfp.svg"} alt={userData?.img} className={styles.pfpImg} />
         </section>
         <section className={styles.txtWraper}>
           <div className={styles.headingAndlogo}>

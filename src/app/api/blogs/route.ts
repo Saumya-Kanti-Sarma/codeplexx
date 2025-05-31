@@ -50,12 +50,18 @@ export async function PUT(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const id = searchParams.get("id");
   const { title, content, image_url, tags } = await req.json();
+  console.log("Received in PUT:", { title, content, image_url, tags });
+  console.log("Params:", { id, user_id: searchParams.get("user_id") });
   const { data, error } = await supabase
     .from("blogs")
     .update([{ title, content, image_url, tags }])
     .eq("id", id)
-    .eq("user_id", searchParams.get("user_id"));
+    .eq("user_id", searchParams.get("user_id"))
+    .select()
   if (error) {
+    if (error) {
+      console.error("Supabase update error:", error);
+    }
     return NextResponse.json({
       status: 400,
       message: "Cannot update, please try later",

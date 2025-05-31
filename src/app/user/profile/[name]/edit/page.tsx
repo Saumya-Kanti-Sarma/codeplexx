@@ -7,8 +7,8 @@ import toast from "react-hot-toast";
 import Cookies from "js-cookie";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import { usePicUpdate, usePicUpload, useUpdate } from "@/hooks/useApi/hooks";
-import { useToString } from "@/hooks/useToString/hook";
+import { dataPicUpdate, dataPicUpload, dataUpdate } from "@/hooks/useApi/hooks";
+import { fileToString } from "@/hooks/useToString/hook";
 
 const EditPfp = () => {
   const router = useRouter();
@@ -50,7 +50,7 @@ const EditPfp = () => {
     if (name === "file") {
       const file = (document.querySelector('input[type="file"]') as HTMLInputElement)?.files?.[0];
       if (file) {
-        const base64 = await useToString(file);
+        const base64 = await fileToString(file);
         // console.log(base64);
 
         setTempImg(base64); // now works correctly
@@ -74,18 +74,18 @@ const EditPfp = () => {
     const imgName = `${Date.now()}-${file?.name}`;
 
     if (file && store.profile === "/icons/pfp.svg") {
-      imageNewURL = `${await usePicUpload({ file, path: `/profile/${imgName}` })}`;
+      imageNewURL = `${await dataPicUpload({ file, path: `/profile/${imgName}` })}`;
       //console.log("no prev img:", imageNewURL);
 
     };
     if (file && store.profile.includes('https://azjgnoxfyygbnquzecyw.supabase.co/storage/v1/object/public/cplexx/profile/')) {
       const oldImgPath = `profile/${store.profile.split("").splice(81).join("")}`;
       //console.log(oldImgPath);
-      imageNewURL = `${await usePicUpdate({ file, path: `/profile/${imgName}`, imgToDelete: oldImgPath })}`;
+      imageNewURL = `${await dataPicUpdate({ file, path: `/profile/${imgName}`, imgToDelete: oldImgPath })}`;
       console.log("new image path: ", imageNewURL);
 
     }
-    const res = await useUpdate({
+    const res = await dataUpdate({
       about: formData.about,
       img: imageNewURL,
       name: formData.name,

@@ -3,7 +3,7 @@ import axios from "axios"
 import { supabase } from "@/app/libs/suprabaseClient";
 
 
-export const useCreate = async (data: {
+export const dataCreate = async (data: {
   // account creating and login
   name?: string,
   email?: string,
@@ -41,7 +41,7 @@ export const useCreate = async (data: {
 
 
 
-export const useUpdate = async (data: {
+export const dataUpdate = async (data: {
   // account creating and login
   name?: string,
   email?: string,
@@ -70,23 +70,9 @@ export const useUpdate = async (data: {
   };
 };
 
-export const useDelete = async (data: {
-  // account creating and login
-  name?: string,
-  email?: string,
-  password?: string,
-  about?: string,
-
-  // blogs creating
-  user_id?: string,
-  title?: string,
-  image_url?: string,
-  tags?: [string],
-  uploaded_by?: string,
-
-}, url: string) => {
+export const dataDelete = async (url: string) => {
   try {
-    const response = await axios.put(url, data);
+    const response = await axios.delete(url);
     if (response.status == 200) return response.data;
     return { message: "Unexpected response from server." };
 
@@ -96,7 +82,7 @@ export const useDelete = async (data: {
   };
 };
 
-export const usePicUpload = async (data: { file: File, path: string }) => {
+export const dataPicUpload = async (data: { file: File, path: string }) => {
   //path= /profile/img-name
 
   const uploadImg = await supabase.storage
@@ -108,10 +94,10 @@ export const usePicUpload = async (data: { file: File, path: string }) => {
   const { data: publicURLData } = supabase.storage
     .from("cplexx")
     .getPublicUrl(data.path);
-  return publicURLData.publicUrl || null;
+  return `${publicURLData.publicUrl}` || null;
 };
 
-export const usePicUpdate = async (data: { file: File, path: string, imgToDelete: string }) => {
+export const dataPicUpdate = async (data: { file: File, path: string, imgToDelete: string }) => {
   //file: from input filed
   // path: path where img is gonna save
   // img to delete: /profile/name-of-img or /blogs/name-og-img
@@ -132,5 +118,5 @@ export const usePicUpdate = async (data: { file: File, path: string, imgToDelete
   const { data: publicURLData } = supabase.storage
     .from("cplexx")
     .getPublicUrl(data.path);
-  return publicURLData.publicUrl || null;
+  return `${publicURLData.publicUrl}` || null;
 };

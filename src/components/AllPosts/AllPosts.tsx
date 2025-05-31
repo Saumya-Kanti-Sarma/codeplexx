@@ -61,7 +61,6 @@ const AllPosts: React.FC<PostParams> = ({ url }) => {
         <BlogPost
           key={index}
           img={item?.image_url || "/def/def-img.jpeg"}
-          category={item.category}
           title={`${item.title}`}
           date={`${item.created_at}`}
           link={`/user/blogs/${item.id}`}

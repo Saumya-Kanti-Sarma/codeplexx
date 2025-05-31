@@ -7,7 +7,6 @@ import Markdown from "react-markdown";
 
 interface BlogProps {
   img?: string,
-  category?: string[],
   title: string,
   date: string,
   link: string,
@@ -15,7 +14,6 @@ interface BlogProps {
 }
 const BlogPost: React.FC<BlogProps> = ({
   img,
-  category,
   title,
   date,
   link,
