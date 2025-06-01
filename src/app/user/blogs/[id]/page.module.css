@@ -36,6 +36,7 @@
 
 }
 
+
 .markdown h1,
 .markdown h2,
 .markdown h3 {
@@ -70,14 +71,16 @@
 }
 
 .markdown pre {
-  background-color: var(--black);
+  background: #000000;
+  background-image: linear-gradient(to right, #2b2b2b 0%, black 100%);
   padding: 1rem;
   overflow-x: auto;
   border-radius: 6px;
 }
 
 .markdown pre code {
-  background-color: var(--black);
+  background: #000000;
+  background-image: linear-gradient(to right, #2b2b2b 0%, black 100%);
   font-weight: 300;
   font-style: normal;
   color: #fff;
