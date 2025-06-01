@@ -26,12 +26,12 @@ const BlogPost: React.FC<BlogProps> = ({
           <img src={img || "/def/def-img.jpeg"} alt={img} />
         </section>
         <section className={styles.textSection}>
-          <div>
-            <h1 className={styles.h1}>{truncateTxt(title, 70, "...")}</h1>
+          <div className={styles.titleAndDescp}>
+            <h1 className={styles.h1}>{truncateTxt(title, 150, "...")}</h1>
             <br />
             <section className={styles.about}>
               <Markdown>
-                {`${truncateTxt(about, window.innerWidth < 600 ? 100 : 200, "...")}`}
+                {`${truncateTxt(about, window.innerWidth < 600 ? 300 : 200, "...")}`}
               </Markdown>
             </section>
           </div>
