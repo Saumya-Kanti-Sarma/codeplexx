@@ -55,6 +55,10 @@
   border-radius: 6px;
 }
 
+.blogContent code::-webkit-scrollbar {
+  display: none;
+}
+
 .markdown table {
   width: 100%;
   border-collapse: collapse;
