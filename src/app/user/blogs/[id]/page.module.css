@@ -5,6 +5,10 @@
   padding: 0 2rem;
 }
 
+.blogContainer {
+  overflow-x: auto;
+}
+
 .title {
   text-align: center;
   font-size: 40px;
@@ -19,6 +23,10 @@
   align-items: start;
 }
 
+.blogImgholder p {
+  margin-bottom: 10px;
+}
+
 .blogImg {
   width: 100%;
   max-width: 1000px;
@@ -28,42 +36,64 @@
 
 }
 
-.blogContent h1,
-.blogContent h2,
-.blogContent h3 {
-  color: var(--primary-green);
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  color: var(--black);
   /* Your palette */
   margin-top: 1.5rem;
+  margin-bottom: 0.7rem;
 }
 
-.blogContent p {
+.markdown p,
+.markdown li {
   line-height: 1.8;
   margin-bottom: 1rem;
+  color: #111111cc;
 }
 
-.blogContent code {
-  background-color: var(--black);
+.markdown p::selection {
+  background-color: #69fc9ae8;
+  color: #414141;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.markdown code {
+  background-color: rgba(255, 102, 0, 0.411);
   padding: 0.2rem 0.4rem;
   font-size: 0.95rem;
   border-radius: 4px;
+  font-weight: 600;
+  font-style: italic;
+  color: #881717;
 }
 
-.blogContent pre {
+.markdown pre {
   background-color: var(--black);
   padding: 1rem;
   overflow-x: auto;
   border-radius: 6px;
 }
 
-.blogContent code::-webkit-scrollbar {
+.markdown pre code {
+  background-color: var(--black);
+  font-weight: 300;
+  font-style: normal;
+  color: #fff;
+}
+
+.markdown code::-webkit-scrollbar {
   display: none;
 }
 
 .markdown table {
   width: 100%;
+  max-width: 1200px;
   border-collapse: collapse;
   margin: 16px 0;
   font-size: 0.95rem;
+  min-width: 300px;
 }
 
 .markdown th,
@@ -71,11 +101,19 @@
   border: 1px solid #ccc;
   padding: 8px 12px;
   text-align: left;
+  overflow-x: scroll;
 }
 
 .markdown thead {
-  background-color: #f0f0f0;
+  background-color: var(--primary-green);
+  color: var(--white);
   font-weight: bold;
+}
+
+.markdown table td select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
 }
 
 .loader,
@@ -97,8 +135,28 @@
   }
 }
 
+@media (max-width:480px) {
+  .blogContainer {
+    padding: 0 0.5rem;
+  }
+
+  .title {
+    margin: 5px;
+  }
+}
+
 @media (max-width:400px) {
   .title {
-    font-size: 26px;
+    margin-top: 5px;
+    font-size: 20px;
+    text-align: left;
   }
+
+  .markdown p,
+  .markdown li {
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    color: #111111cc;
+  }
+
 }

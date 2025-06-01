@@ -26,8 +26,32 @@ body {
 .lastDiv {
   height: 100px;
   width: 100%;
-  background-color: orange;
+  background-color: transparent;
   margin-bottom: 10px;
+}
+
+table,
+th,
+td {
+  resize: none !important;
+  overflow: visible !important;
+}
+
+th::before,
+th::after,
+td::before,
+td::after {
+  display: none !important;
+  content: none !important;
+}
+
+th,
+td {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  appearance: none;
+  -webkit-appearance: none;
 }
 
 :root {

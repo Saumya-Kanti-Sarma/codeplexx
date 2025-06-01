@@ -14,7 +14,7 @@ export default function Home() {
   return (
     <>
       <div className={styles.filterArea}>
-        {["All", "React", "Node.js", "MongoDB", "Supabase", "Next.js", "DSA", "Stories", "Projects"].map((item, index) => (
+        {["All", "React", "Node.js", "MongoDB", "Supabase", "Next.js", "JS", "Stories", "Projects"].map((item, index) => (
           <Btn
             key={index}
             text={`${item}`}
@@ -26,7 +26,7 @@ export default function Home() {
       <div className={styles.content}>
         <AllPosts url={`/api/blogs/getAll?from=0&to=12&filter=${filter || "all"}`} />
       </div>
-
+      <div className="lastDiv"></div>
     </>
   );
 }

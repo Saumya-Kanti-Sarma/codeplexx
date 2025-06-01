@@ -34,12 +34,12 @@ const AllPosts: React.FC<PostParams> = ({ url }) => {
 
   if (loading) return (
     <>
-      {[1, 3, 3].map((_, index) => (
-        <div className={styles.wraper} key={index}>
-          <section className={styles.imgSection}>
+      {[1, 2, 3, 4, 5, 6, 7].map((_, index) => (
+        <div className={styles.skeletonWraper} key={index}>
+          <section className={styles.skeletonImgSection}>
             <img src={"/def/def-img.jpeg"} alt={"def-img.jpeg"} />
           </section>
-          <section className={styles.textSection}>
+          <section className={styles.skeletonTextSection}>
             <div></div>
             <div></div>
           </section>

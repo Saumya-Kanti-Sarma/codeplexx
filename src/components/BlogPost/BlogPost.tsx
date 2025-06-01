@@ -3,6 +3,7 @@
 import styles from "./page.module.css";
 import { truncateTxt } from "@/hooks/truncate/Truncate";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import Markdown from "react-markdown";
 
 interface BlogProps {
@@ -19,6 +20,24 @@ const BlogPost: React.FC<BlogProps> = ({
   link,
   about
 }) => {
+
+  const [truncateLength, setTruncateLength] = useState(0);
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 800) {
+        setTruncateLength(400);
+      } else if (window.innerWidth >= 600) {
+        setTruncateLength(300);
+      } else if (window.innerWidth >= 400) {
+        setTruncateLength(200);
+      } else {
+        setTruncateLength(100);
+      }
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
   return (
     <Link href={link} className={styles.link}>
       <div className={styles.wraper}>
@@ -28,10 +47,9 @@ const BlogPost: React.FC<BlogProps> = ({
         <section className={styles.textSection}>
           <div className={styles.titleAndDescp}>
             <h1 className={styles.h1}>{truncateTxt(title, 150, "...")}</h1>
-            <br />
             <section className={styles.about}>
               <Markdown>
-                {`${truncateTxt(about, window.innerWidth < 600 ? 300 : 200, "...")}`}
+                {`${truncateTxt(about, truncateLength, "...")}`}
               </Markdown>
             </section>
           </div>

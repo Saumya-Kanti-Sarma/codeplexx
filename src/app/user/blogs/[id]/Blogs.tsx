@@ -56,7 +56,7 @@ const Blogs = () => {
                 <p>posted: {truncateTxt(`${item?.created_at}`, 10, "")}</p>
               </div>
               <hr />
-              <div className="markdown">
+              <div className={styles.markdown}>
 
                 <ReactMarkdown rehypePlugins={[rehypeHighlight]} remarkPlugins={[remarkGfm]}>
                   {item?.content}
