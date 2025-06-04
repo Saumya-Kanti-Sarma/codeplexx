@@ -18,7 +18,7 @@ interface profileProps {
 
 const Profile: React.FC<profileProps> = ({
   profileName = "",
-  editBtnDisplay,
+  editBtnDisplay = false,
   displayTruncateBtn = true,
   displayVisitBtn = true,
 }) => {

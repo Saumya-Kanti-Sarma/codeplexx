@@ -4,7 +4,6 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  overflow: hidden;
   padding: 0 10px;
   gap: 20px;
 }
@@ -36,10 +35,47 @@
 
 }
 
+.searchWrapper {
+  flex: 1;
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+}
+
 .searchArea {
   flex: 1;
   position: relative;
   max-width: 1200px;
+  position: relative;
+}
+
+.searchvals {
+  position: absolute;
+  width: 100%;
+  max-width: 1200px;
+  top: 60px;
+  left: 0;
+  background-color: #dadada;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+  gap: 20px;
+}
+
+.searchLinks {
+  padding: 10px;
+  width: 100%;
+  font-size: 19px;
+  color: #2c2c2c;
+  transition: 0.22s ease-in-out;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.searchLinks:hover {
+  background-color: #a0a0a0;
+  transform: scale(1.01);
 }
 
 .searchInp {
