@@ -11,6 +11,7 @@ import Profile from "@/components/Profile/Profile";
 import AllPosts from "@/components/AllPosts/AllPosts";
 import Loader from "@/app/utils/Loaders/Loader";
 import { useParams } from "next/navigation";
+import MarkdownRenderer from "@/components/Markdown/Markdown";
 
 const Blogs = () => {
   type blog = {
@@ -57,10 +58,7 @@ const Blogs = () => {
               </div>
               <hr />
               <div className={styles.markdown}>
-
-                <ReactMarkdown rehypePlugins={[rehypeHighlight]} remarkPlugins={[remarkGfm]}>
-                  {item?.content}
-                </ReactMarkdown>
+                <MarkdownRenderer content={item?.content} />
               </div>
 
             </article>
