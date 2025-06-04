@@ -36,7 +36,7 @@ const CreatePost = () => {
       const tagsValue = value.replace(/\s+/g, '').replace(/,+/g, ',');
       setFormData(prev => ({
         ...prev,
-        [name]: tagsValue
+        [name]: tagsValue.toLowerCase()
       }));
     } else {
       setFormData(prev => ({
