@@ -1,0 +1,19 @@
+.btn {
+  background-color: var(--light-green);
+  color: #fff;
+  border: none;
+  padding: 10px;
+  min-width: 80px;
+  border-radius: 12px;
+  font-size: larger;
+  transition: 0.22s ease-in-out;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+}
+
+.btn:hover {
+  background-color: var(--primary-green);
+  box-shadow: 0 0 5px #000000a6;
+}

@@ -1,0 +1,165 @@
+.blogContainer {
+  max-width: 1200px;
+  margin: 0 auto;
+  color: #111;
+  padding: 0 2rem;
+}
+
+.blogContainer {
+  overflow-x: auto;
+}
+
+.title {
+  text-align: center;
+  font-size: 40px;
+}
+
+.blogImgholder {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
+}
+
+.blogImgholder p {
+  margin-bottom: 10px;
+}
+
+.blogImg {
+  width: 100%;
+  max-width: 1000px;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  margin: 0 auto;
+
+}
+
+
+.markdown h1,
+.markdown h2,
+.markdown h3 {
+  color: var(--black);
+  /* Your palette */
+  margin-top: 1.5rem;
+  margin-bottom: 0.7rem;
+}
+
+.markdown p,
+.markdown li {
+  line-height: 1.8;
+  margin-bottom: 1rem;
+  color: #111111cc;
+}
+
+.markdown p::selection {
+  background-color: #69fc9ae8;
+  color: #414141;
+  font-style: italic;
+  font-weight: 600;
+}
+
+.markdown code {
+  background-color: rgba(255, 102, 0, 0.411);
+  padding: 0.2rem 0.4rem;
+  font-size: 0.95rem;
+  border-radius: 4px;
+  font-weight: 600;
+  font-style: italic;
+  color: #881717;
+}
+
+.markdown pre {
+  background: #000000;
+  background-image: linear-gradient(to right, #2b2b2b 0%, black 100%);
+  padding: 1rem;
+  overflow-x: auto;
+  border-radius: 6px;
+}
+
+.markdown pre code {
+  background: #000000;
+  background-image: linear-gradient(to right, #2b2b2b 0%, black 100%);
+  font-weight: 300;
+  font-style: normal;
+  color: #fff;
+}
+
+.markdown code::-webkit-scrollbar {
+  display: none;
+}
+
+.markdown table {
+  width: 100%;
+  max-width: 1200px;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 0.95rem;
+  min-width: 300px;
+}
+
+.markdown th,
+.markdown td {
+  border: 1px solid #ccc;
+  padding: 8px 12px;
+  text-align: left;
+  overflow-x: scroll;
+}
+
+.markdown thead {
+  background-color: var(--primary-green);
+  color: var(--white);
+  font-weight: bold;
+}
+
+.markdown table td select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.loader,
+.smallloader {
+  height: calc(100dvh - 200px);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.smallloader {
+  height: auto;
+}
+
+@media (max-width:800px) {
+  .title {
+    font-size: 30px;
+  }
+}
+
+@media (max-width:480px) {
+  .blogContainer {
+    padding: 0 0.5rem;
+  }
+
+  .title {
+    margin: 5px;
+  }
+}
+
+@media (max-width:400px) {
+  .title {
+    margin-top: 5px;
+    font-size: 20px;
+    text-align: left;
+  }
+
+  .markdown p,
+  .markdown li {
+    line-height: 1.8;
+    margin-bottom: 1rem;
+    color: #111111cc;
+  }
+
+}

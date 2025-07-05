@@ -1,0 +1,90 @@
+.skeletonWraper {
+  max-width: 1200px;
+  height: 210px;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  gap: 10px;
+  margin: 20px;
+  margin-bottom: 0;
+  transition: 0.122s ease-in-out;
+  animation: opacityAnimation 1.5s infinite;
+}
+
+@keyframes opacityAnimation {
+  0% {
+    opacity: 1;
+  }
+
+  25% {
+    opacity: 0.7;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+
+  75% {
+    opacity: 0.7;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+.skeletonImgSection {
+  flex: 1;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.skeletonImgSection img {
+  height: 100%;
+  min-width: 150px;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  filter: grayscale(100%);
+  opacity: 0.5;
+}
+
+.skeletonTextSection {
+  flex: 2;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.skeletonTextSection div {
+  flex: 1;
+  width: 100%;
+  background-color: #bebebe;
+}
+
+@media (max-width: 900px) {
+  .skeletonWraper {
+    height: 160px;
+  }
+}
+
+@media (max-width: 690px) {
+  .skeletonWraper {
+    height: 120px;
+  }
+
+  .skeletonTextSection {
+    align-items: start;
+    justify-content: start;
+  }
+
+}
+
+@media (max-width: 480px) {
+  .skeletonWraper {
+    height: 80px;
+  }
+}
