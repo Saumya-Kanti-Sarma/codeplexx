@@ -1,0 +1,6 @@
+{
+  "scripts": {
+    "app": "cd expo-app && npx expo start",
+    "web": "cd web-app && npm run dev"
+  }
+}
