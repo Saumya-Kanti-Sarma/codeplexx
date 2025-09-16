@@ -6,7 +6,7 @@ import axios from "axios";
 import { truncateTxt } from "@/hooks/truncate/Truncate";
 import Profile from "@/components/Profile/Profile";
 import AllPosts from "@/components/AllPosts/AllPosts";
-import Loader from "@/app/utils/Loaders/Loader";
+import Loader from "@/components/UI/Loaders/Loader";
 import { useParams } from "next/navigation";
 import MarkdownRenderer from "@/components/Markdown/Markdown";
 

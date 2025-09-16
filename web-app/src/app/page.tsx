@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import Input from "@/app/utils/Input/Input";
-import Btn from "@/app/utils/Btn/Btn";
+import Input from "@/components/UI/Input/Input";
+import Btn from "@/components/UI/Btn/Btn";
 import styles from "./page.module.css";
 import { toast } from "react-hot-toast";
 import Cookies from "js-cookie";

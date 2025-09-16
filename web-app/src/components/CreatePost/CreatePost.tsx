@@ -1,9 +1,9 @@
 "use client";
 import styles from "./page.module.css";
 import { useUserStore } from "../../../store/zestStore/Store";
-import Btn from "@/app/utils/Btn/Btn";
+import Btn from "@/components/UI/Btn/Btn";
 import React, { useEffect, useState } from "react";
-import Input from "@/app/utils/Input/Input";
+import Input from "@/components/UI/Input/Input";
 import { supabase } from "@/app/libs/suprabaseClient";
 import toast from "react-hot-toast";
 
