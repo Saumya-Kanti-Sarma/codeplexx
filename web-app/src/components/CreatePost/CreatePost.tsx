@@ -111,17 +111,17 @@ const CreatePost = () => {
   return (
     <>
       <Input
-        h3="Title" inpName="title" inpPlaceholder="Enter title" inpValue={formData.title} inpOnChange={handleformChange}
+        label="Title" inpName="title" inpPlaceholder="Enter title" inpValue={formData.title} inpOnChange={handleformChange}
       />
       <Input
-        h3="select image" inpType="file" inpName="image" inpOnChange={handleformChange}
+        label="select image" inpType="file" inpName="image" inpOnChange={handleformChange}
       />
       <div className={styles.description}>
         <h3>Enter Description</h3>
         <textarea name="description" id="description" placeholder="Enter description here" value={formData.description} onChange={handleformChange} />
       </div>
       <Input
-        h3="Enter tags" inpName="tags" inpPlaceholder="Eg: React,Node.js, frotned, python" inpValue={formData.tags} inpOnChange={handleformChange}
+        label="Enter tags" inpName="tags" inpPlaceholder="Eg: React,Node.js, frotned, python" inpValue={formData.tags} inpOnChange={handleformChange}
       />
       <Btn text={btnText} onClick={handleFormSubmit} isDisable={disableBtn} displayLoader={btnLoader} />
 
