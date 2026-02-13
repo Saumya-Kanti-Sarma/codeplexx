@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useUserStore } from "../../../../../../store/zestStore/Store";
-import Btn from "@/components/UI/Btn/Btn";
+import Btn from "../../../../../../UI/Btn/Btn";
 import styles from "./page.module.css";
 import toast from "react-hot-toast";
 import Cookies from "js-cookie";

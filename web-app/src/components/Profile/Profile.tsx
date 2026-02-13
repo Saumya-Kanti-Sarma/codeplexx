@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from 'react';
-import Btn from '../UI/Btn/Btn';
+import Btn from '../../../UI/Btn/Btn';
 import styles from './page.module.css';
 import axios from 'axios';
 import { truncateTxt } from '@/hooks/truncate/Truncate';

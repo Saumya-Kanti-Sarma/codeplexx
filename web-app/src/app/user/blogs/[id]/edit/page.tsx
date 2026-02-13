@@ -1,9 +1,9 @@
 "use client";
 import styles from "./page.module.css";
 import { useUserStore } from "../../../../../../store/zestStore/Store";
-import Btn from "@/components/UI/Btn/Btn";
+import Btn from "../../../../../../UI/Btn/Btn";
 import React, { useEffect, useState } from "react";
-import Input from "@/components/UI/Input/Input";
+import Input from "../../../../../../UI/Input/Input";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useParams } from "next/navigation";
@@ -79,13 +79,13 @@ const CreatePost = () => {
       </div>
       <div className={styles.main}>
         <Input
-          h3="Title" inpName="title" inpPlaceholder="Enter title" inpValue={formData.title} inpOnChange={handleOnchange} />
+          label="Title" inpName="title" inpPlaceholder="Enter title" inpValue={formData.title} inpOnChange={handleOnchange} />
         <div className={styles.description}>
           <h3>Enter Description</h3>
           <textarea name="description" id="description" placeholder="Enter description here" value={formData.description} onChange={handleOnchange} />
         </div>
         <Input
-          h3="Enter tags" inpName="tags" inpPlaceholder="Eg: React,Node.js, frotned, python" inpValue={formData.tags.replaceAll(" ", ",")} inpOnChange={handleOnchange} />
+          label="Enter tags" inpName="tags" inpPlaceholder="Eg: React,Node.js, frotned, python" inpValue={formData.tags.replaceAll(" ", ",")} inpOnChange={handleOnchange} />
         <br />
         <div className={styles.btnArea}>
           <Btn text={"Delete"} onClick={handledelete} bgColor="--red" displayLoader={deleteTxt == "deleting..." ? true : false} isDisable={deleteTxt == "deleting..." ? true : false} />

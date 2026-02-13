@@ -3,7 +3,7 @@ import React from 'react';
 import styles from './page.module.css';
 
 interface InpProps {
-  h3?: string;
+  label?: string;
   inpType?: React.HTMLInputTypeAttribute;
   inpName?: string;
   inpId?: string;
@@ -16,7 +16,7 @@ interface InpProps {
 }
 
 const Input: React.FC<InpProps> = ({
-  h3 = "Text",
+  label = "Text",
   inpType = "text",
   inpName = "name",
   inpId = "inpId",
@@ -29,7 +29,7 @@ const Input: React.FC<InpProps> = ({
 }) => {
   return (
     <div className={styles.div}>
-      <h3 className={styles.h3}>{h3}</h3>
+      <h3 className={styles.h3}>{label}</h3>
       <input
         type={inpType}
         name={inpName}

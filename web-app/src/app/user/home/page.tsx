@@ -1,5 +1,5 @@
 "use client"
-import Btn from "@/components/UI/Btn/Btn";
+import Btn from "../../../../UI/Btn/Btn";
 import styles from "./page.module.css";
 import AllPosts from "@/components/AllPosts/AllPosts";
 import { useEffect, useState } from "react";

@@ -1,13 +1,13 @@
 "use client";
 import Profile from "@/components/Profile/Profile";
 import styles from "./page.module.css";
-import Btn from "@/components/UI/Btn/Btn";
+import Btn from "../../../../../UI/Btn/Btn";
 import React, { useEffect, useState } from "react";
 import CreatePost from "@/components/CreatePost/CreatePost";
 import AllPosts from "@/components/AllPosts/AllPosts";
 import { useUserStore } from "../../../../../store/zestStore/Store";
 import axios from "axios";
-import Loader from "@/components/UI/Loaders/Loader";
+import Loader from "../../../../../UI/Loaders/Loader";
 import { useParams } from "next/navigation";
 
 

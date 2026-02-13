@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import Input from "@/components/UI/Input/Input";
-import Btn from "@/components/UI/Btn/Btn";
+import Input from "../../UI/Input/Input";
+import Btn from "../../UI/Btn/Btn";
 import styles from "./page.module.css";
 import { toast } from "react-hot-toast";
 import Cookies from "js-cookie";
@@ -102,7 +102,7 @@ export default function Home() {
         >
 
           <Input
-            h3="Your Name"
+            label="Your Name"
             inpPlaceholder="Enter Your Name Here.."
             inpId="name"
             inpName="name"
@@ -114,7 +114,7 @@ export default function Home() {
 
           {!isLogin && (
             <Input
-              h3="Your Email"
+              label="Your Email"
               inpPlaceholder="Enter Your Email Here.."
               inpId="email"
               inpName="email"
@@ -125,7 +125,7 @@ export default function Home() {
             />
           )}
           <Input
-            h3="Your Password"
+            label="Your Password"
             inpPlaceholder="Enter Your Password Here.."
             inpName="password"
             inpId="password"
