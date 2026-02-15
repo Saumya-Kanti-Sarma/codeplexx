@@ -9,6 +9,7 @@ import AllPosts from "@/components/AllPosts/AllPosts";
 import Loader from "../../../../../UI/Loaders/Loader";
 import { useParams } from "next/navigation";
 import MarkdownRenderer from "@/components/Markdown/Markdown";
+import ChatBot from "@/components/Chatbot/ChatBot";
 
 const Blogs = () => {
   type blog = {
@@ -23,6 +24,7 @@ const Blogs = () => {
 
   const [rawData, setData] = useState<blog[]>([]);
   const params = useParams<{ id: string }>();
+  const [chatOpen, setChatOpen] = useState(false);
 
   useEffect(() => {
     async function GetData() {
@@ -86,13 +88,30 @@ const Blogs = () => {
           <Loader />
         </div>
       </>}
-      <div className={styles.chat_wrapper}>
-        <button className={styles.chat_with_ai}>
-          <img src="/icons/chatBot.svg" alt="" />
-        </button>
-        <span className={styles.tooltip}>Chat with our AI</span>
-      </div>
+      {rawData && rawData.length > 0 && (
+        <>
+          <div className={styles.chat_wrapper}>
+            <button
+              className={styles.chat_with_ai}
+              aria-label="Chat with our AI"
+              onClick={() => setChatOpen(prev => !prev)}
+            >
+              <img src="/icons/chatBot.svg" alt="" />
+            </button>
+            <span className={styles.tooltip}>Chat with our AI</span>
+          </div>
 
+          <ChatBot
+            isOpen={chatOpen}
+            onClose={() => setChatOpen(false)}
+          />
+        </>
+      )}
+
+      <ChatBot
+        isOpen={chatOpen}
+        onClose={() => setChatOpen(false)}
+      />
     </>
   );
 }
