@@ -9,34 +9,36 @@ export const dataCreate = async (data: {
   email?: string,
   password?: string,
   about?: string,
-
-  // blogs creating
-  user_id?: string,
-  title?: string,
-  image_url?: string,
-  tags?: [string],
-  uploaded_by?: string,
-
 }, url: string) => {
   try {
     const response = await axios.post(url, data);
+    console.log(response.data);
+
     if (response.status == 200) return response.data;
-    return { message: "Unexpected response from server." };
-    // A demo response:{ 
-    //     "message": "this will be the message",
+    //     `
+    // {
+    //     "message": "Welcome user_name",
+    //     "status": 200,
     //     "data": [
-    //         {}
+    //         {
+    //             "id": "148bc54d-140d-4df4-97e0-4b2f31c193a2",
+    //             "img": "/icons/pfp.svg",
+    //             "name": "user_name",
+    //             "email": "userName@gmail.com",
+    //             "password": "521d55b8ec65bbcdaf8127573f9fbf48834dafc7b76382f909ed034fa4c3d88a",
+    //             "created_at": "2026-02-15T07:45:50.122051",
+    //             "about": null
+    //         }
     //     ]
     // }
+    // `
+    return { message: "Unexpected response from server." };
+
 
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) return error.response.data;
     return { message: "An unknown error occurred." };
   };
-  //   A demo response: {
-  //     "message": "",
-  //     "error": {}
-  // }
 };
 
 
@@ -49,14 +51,6 @@ export const dataUpdate = async (data: {
   about?: string,
   img?: string,
   id?: string,
-
-  // blogs creating
-  user_id?: string,
-  content?: string,
-  title?: string,
-  image_url?: string,
-  tags?: string[],
-  uploaded_by?: string,
 
 }, url: string) => {
   try {
