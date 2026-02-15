@@ -48,7 +48,6 @@ const Blogs = () => {
           <div className={styles.blogContainer} key={index}>
             <article className={styles.blogContent}>
               <h1 className={styles.title}>{item?.title}</h1>
-              <p></p>
               <div className={styles.blogImgholder}>
                 <img src={item?.image_url || "/def/def-img.jpeg"} alt="blogImg" className={styles.blogImg} />
                 <p>posted: {truncateTxt(`${item?.created_at}`, 10, "")}</p>
@@ -87,6 +86,13 @@ const Blogs = () => {
           <Loader />
         </div>
       </>}
+      <div className={styles.chat_wrapper}>
+        <button className={styles.chat_with_ai}>
+          <img src="/icons/chatBot.svg" alt="" />
+        </button>
+        <span className={styles.tooltip}>Chat with our AI</span>
+      </div>
+
     </>
   );
 }
