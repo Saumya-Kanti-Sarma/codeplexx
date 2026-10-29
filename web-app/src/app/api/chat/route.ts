@@ -1,11 +1,6 @@
 import { OpenAI } from "openai";
 import { NextRequest, NextResponse } from "next/server";
 
-const openai = new OpenAI({
-  apiKey: process.env.MIMOTRON_ULTRA_API_KEY || process.env.NVIDIA_API_KEY || "",
-  baseURL: "https://integrate.api.nvidia.com/v1",
-});
-
 // In-memory rate limiter: IP -> { count, resetTime }
 const rateLimitStore = new Map<string, { count: number; resetTime: number }>();
 const RATE_LIMIT_MAX = 10; // requests per minute
@@ -64,12 +59,19 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    if (!openai.apiKey) {
+    const apiKey = process.env.MIMOTRON_ULTRA_API_KEY || process.env.NVIDIA_API_KEY || "";
+
+    if (!apiKey) {
       return NextResponse.json(
         { error: "AI service is not configured" },
         { status: 500 }
       );
     }
+
+    const openai = new OpenAI({
+      apiKey,
+      baseURL: "https://integrate.api.nvidia.com/v1",
+    });
 
     const systemPrompt = `You are an AI assistant for CodePlexx, a developer blog platform. You can ONLY answer questions about the current blog post provided below. Do not answer questions unrelated to the blog post. If a user asks about anything else, politely decline and say you can only help with questions about this specific blog post.
 
