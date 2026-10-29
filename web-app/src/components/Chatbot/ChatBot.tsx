@@ -1,9 +1,14 @@
+"use client";
+
 import { useEffect, useRef, useState } from "react";
 import styles from "./ChatBot.module.css";
+import axios from "axios";
+import MarkdownRenderer from "@/components/Markdown/Markdown";
 
 interface ChatBotProps {
   isOpen: boolean;
   onClose: () => void;
+  blogContent?: string;
 }
 
 interface Message {
@@ -14,19 +19,24 @@ interface Message {
 }
 
 const ERROR_RESPONSE =
-  "Opps! unable to connect with the server. Please try again! :(";
+  "Oops! Unable to connect with the server. Please try again! :)";
 
-const ChatBot = ({ isOpen, onClose }: ChatBotProps) => {
+const RATE_LIMIT_MESSAGE =
+  "You are sending messages too quickly. Please wait a moment before asking again.";
+
+const ChatBot = ({ isOpen, onClose, blogContent }: ChatBotProps) => {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: 1,
       role: "bot",
       content:
-        "Welcome to CodePlexx. I am your AI assistant. How can I help you today?... :)",
+        "Welcome to CodePlexx. I am your AI assistant. You can ask me anything about this blog post. How can I help you today?... :)",
     },
   ]);
 
   const [input, setInput] = useState("");
+  const [rateLimited, setRateLimited] = useState<{ retryAfter?: number } | null>(null);
+  const [expanded, setExpanded] = useState(false);
   const msgEndRef = useRef<HTMLDivElement | null>(null);
 
   // Auto scroll to bottom
@@ -34,8 +44,10 @@ const ChatBot = ({ isOpen, onClose }: ChatBotProps) => {
     msgEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isOpen]);
 
-  const sendMessage = () => {
+  const sendMessage = async () => {
     if (!input.trim()) return;
+
+    setRateLimited(null);
 
     const userMsg: Message = {
       id: Date.now(),
@@ -50,19 +62,41 @@ const ChatBot = ({ isOpen, onClose }: ChatBotProps) => {
       loading: true,
     };
 
-    setMessages(prev => [...prev, userMsg, loadingMsg]);
+    setMessages((prev) => [...prev, userMsg, loadingMsg]);
     setInput("");
 
-    // Simulated API delay
-    setTimeout(() => {
-      setMessages(prev =>
-        prev.map(msg =>
-          msg.loading
-            ? { ...msg, loading: false, content: ERROR_RESPONSE }
-            : msg
+    try {
+      const response = await axios.post("/api/chat", {
+        messages: [...messages, userMsg],
+        blogContent: blogContent || "",
+      });
+
+      const reply = response.data.reply || "No response received.";
+
+      setMessages((prev) =>
+        prev.map((msg) =>
+          msg.loading ? { ...msg, loading: false, content: reply } : msg
         )
       );
-    }, 2000);
+    } catch (error: any) {
+      if (error.response?.status === 429) {
+        setRateLimited({
+          retryAfter: error.response.data?.retryAfter,
+        });
+      } else {
+        setMessages((prev) =>
+          prev.map((msg) =>
+            msg.loading
+              ? { ...msg, loading: false, content: ERROR_RESPONSE }
+              : msg
+          )
+        );
+      }
+    } finally {
+      setMessages((prev) =>
+        prev.map((msg) => (msg.loading ? { ...msg, loading: false } : msg))
+      );
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -72,14 +106,30 @@ const ChatBot = ({ isOpen, onClose }: ChatBotProps) => {
   };
 
   return (
-    <div className={`${styles.chatbot} ${isOpen ? styles.open : ""}`}>
+    <div className={`${styles.chatbot} ${expanded ? styles.expanded : ""} ${isOpen ? styles.open : ""}`}>
       <div className={styles.header}>
         <span>AI Assistant</span>
-        <button onClick={onClose}>✕</button>
+        <div className={styles.headerActions}>
+          <button
+            className={styles.expandBtn}
+            onClick={() => setExpanded(!expanded)}
+            aria-label={expanded ? "Collapse" : "Expand"}
+          >
+            {expanded ? "↙" : "↗"}
+          </button>
+          <button onClick={onClose}>✕</button>
+        </div>
       </div>
 
+      {rateLimited && (
+        <div className={styles.rateLimit}>
+          {RATE_LIMIT_MESSAGE}
+          {rateLimited.retryAfter && ` (Retry in ~${rateLimited.retryAfter}s)`}
+        </div>
+      )}
+
       <div className={styles.messages}>
-        {messages.map(msg => (
+        {messages.map((msg) => (
           <div
             key={msg.id}
             className={
@@ -88,29 +138,40 @@ const ChatBot = ({ isOpen, onClose }: ChatBotProps) => {
                 : styles.msgRowBot
             }
           >
-            <div className={`${msg.role === "user" ? styles.userMsg : styles.botMsg} ${msg.loading ? styles.loadingWrapper : ""}`}>
-              {msg.loading ?
+            <div
+              className={`${msg.role === "user" ? styles.userMsg : styles.botMsg} ${
+                msg.loading ? styles.loadingWrapper : ""
+              }`}
+            >
+              {msg.loading ? (
                 <>
                   <div className={styles.skeleton} />
                   <div className={styles.skeleton} />
-                </> : msg.content}
+                </>
+              ) : msg.role === "bot" ? (
+                <MarkdownRenderer content={msg.content} />
+              ) : (
+                msg.content
+              )}
             </div>
           </div>
         ))}
 
         <div ref={msgEndRef} />
-
       </div>
 
       <div className={styles.inputBox}>
         <input
           type="text"
-          placeholder="Ask something…"
+          placeholder="Ask about this blog post…"
           value={input}
-          onChange={e => setInput(e.target.value)}
+          onChange={(e) => setInput(e.target.value)}
           onKeyDown={handleKeyDown}
+          disabled={!!rateLimited}
         />
-        <button onClick={sendMessage}>Send</button>
+        <button onClick={sendMessage} disabled={!!rateLimited || !input.trim()}>
+          Send
+        </button>
       </div>
     </div>
   );

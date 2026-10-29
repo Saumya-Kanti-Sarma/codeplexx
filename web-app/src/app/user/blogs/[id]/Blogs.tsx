@@ -104,14 +104,10 @@ const Blogs = () => {
           <ChatBot
             isOpen={chatOpen}
             onClose={() => setChatOpen(false)}
+            blogContent={rawData[0]?.content || ""}
           />
         </>
       )}
-
-      <ChatBot
-        isOpen={chatOpen}
-        onClose={() => setChatOpen(false)}
-      />
     </>
   );
 }
