@@ -13,6 +13,12 @@
   gap: 10px;
 }
 
+
+[data-theme="dark"] .btn {
+  color: black;
+}
+
+
 .btn:hover {
   background-color: var(--primary-green);
   box-shadow: 0 0 5px #000000a6;

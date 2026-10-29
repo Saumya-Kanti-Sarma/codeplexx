@@ -50,5 +50,28 @@ td {
   --light-green: #8CB198;
   --white: #fff;
   --black: #000;
+  --bg-color: #ffffff;
+  --text-color: #111111;
+  --muted-color: #666666;
+  --border-color: #d1d9d6;
+  --nav-bg: #0A8834;
+  --nav-text: #ffffff;
+  --card-bg: #ffffff;
+}
 
+[data-theme="dark"] {
+  --bg-color: #0f0f0f;
+  --text-color: #f0f0f0;
+  --muted-color: #aaaaaa;
+  --border-color: #333333;
+  --nav-bg: #121212;
+  --nav-text: #ffffff;
+  --card-bg: #1a1a1a;
+}
+
+html,
+body {
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }

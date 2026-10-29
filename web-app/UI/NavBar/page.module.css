@@ -11,11 +11,32 @@
 .nav button {
   background: transparent;
   border: none;
+  cursor: pointer;
+}
+
+.themeToggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.themeToggle:hover {
+  background-color: var(--border-color);
 }
 
 .h1Logo a {
-  color: var(--white);
+  color: white;
   text-decoration: none;
+}
+
+[data-theme="dark"] .h1Logo a {
+  color: black;
 }
 
 .profileBtn a {
@@ -23,8 +44,9 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  color: var(--white);
+  color: var(--nav-text);
   text-decoration: none;
+  filter: invert(--invert);
 }
 
 .profileBtn a img {
@@ -33,6 +55,10 @@
   object-fit: cover;
   border-radius: 100%;
 
+}
+
+[data-theme="dark"] .profileBtn {
+  filter: invert(1);
 }
 
 .searchWrapper {
@@ -55,26 +81,28 @@
   max-width: 1200px;
   top: 60px;
   left: 0;
-  background-color: #dadada;
+  background-color: var(--card-bg);
+  color: var(--text-color);
   display: flex;
   flex-direction: column;
   justify-content: start;
   align-items: start;
   gap: 20px;
+  border: 1px solid var(--border-color);
 }
 
 .searchLinks {
   padding: 10px;
   width: 100%;
   font-size: 19px;
-  color: #2c2c2c;
+  color: var(--text-color);
   transition: 0.22s ease-in-out;
   cursor: pointer;
   text-decoration: none;
 }
 
 .searchLinks:hover {
-  background-color: #a0a0a0;
+  background-color: var(--border-color);
   transform: scale(1.01);
 }
 
@@ -87,13 +115,15 @@
   border: none;
   padding: 0;
   padding-left: 10px;
+  background-color: var(--card-bg);
+  color: var(--text-color);
 }
 
 .searchArea button {
   position: absolute;
   right: -10px;
   top: 0;
-  background-color: #2c2c2c;
+  background-color: var(--nav-bg);
   height: 100%;
   width: 50px;
   border-radius: 0 10px 10px 0;

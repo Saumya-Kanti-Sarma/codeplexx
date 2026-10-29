@@ -1,7 +1,7 @@
 .blogContainer {
   max-width: 1200px;
   margin: 0 auto;
-  color: #111;
+  color: var(--text-color);
   padding: 0 2rem;
 }
 
@@ -48,12 +48,12 @@
 .markdown li {
   line-height: 1.8;
   margin-bottom: 1rem;
-  color: #111111cc;
+  color: var(--text-color);
 }
 
 .markdown::selection {
   background-color: #69fc9ae8;
-  color: #242424;
+  color: var(--text-color);
   font-style: oblique;
 }
 
@@ -63,7 +63,7 @@
   font-size: 0.95rem;
   border-radius: 4px;
   font-weight: 600;
-  color: #0c0a2b8f;
+  color: var(--text-color);
 }
 
 .markdown pre code {
@@ -216,7 +216,8 @@
   .markdown li {
     line-height: 1.8;
     margin-bottom: 1rem;
-    color: #111111cc;
+
+    color: var(--text-color);
   }
 
 }

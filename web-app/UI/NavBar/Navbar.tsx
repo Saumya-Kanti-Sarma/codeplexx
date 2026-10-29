@@ -5,6 +5,8 @@ import { useState, useRef } from "react";
 import { useUserStore } from "../../store/zestStore/Store";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useTheme } from "@/components/ThemeProvider/ThemeProvider";
+import { FaSun as Sun, FaMoon as Moon } from "react-icons/fa";
 
 type SearchItem = {
   title?: string;
@@ -20,6 +22,7 @@ const Navbar = () => {
 
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
   const { name, profile } = useUserStore();
+  const { theme, toggleTheme } = useTheme();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setLoading(true);
@@ -77,6 +80,13 @@ const Navbar = () => {
           </>}
         </div>
       </div>
+      <button
+        className={styles.themeToggle}
+        onClick={toggleTheme}
+        aria-label="Toggle theme"
+      >
+        {theme === "light" ? <Moon size={20} /> : <Sun size={20} />}
+      </button>
       <button className={styles.profileBtn}>
         <Link href={name ? `/user/profile/${name}` : "/"}>
           <img src={profile || "/icons/pfp.svg"} alt="Profile" />

@@ -1,9 +1,10 @@
-"use client";;
+"use client";
 import "./globals.css";
 import { Toaster } from "react-hot-toast";
 import { useEffect } from "react";
 import Cookies from "js-cookie";
 import { useUserStore } from "../../store/zestStore/Store";
+import { ThemeProvider } from "../components/ThemeProvider/ThemeProvider";
 
 
 export default function RootLayout({
@@ -35,11 +36,13 @@ export default function RootLayout({
 
       </head>
       <body>
-        <Toaster position='top-center' reverseOrder={false} />
-        {children}
-        <br />
-        <br />
-        <br />
+        <ThemeProvider>
+          <Toaster position='top-center' reverseOrder={false} />
+          {children}
+          <br />
+          <br />
+          <br />
+        </ThemeProvider>
       </body>
     </html>
   );
